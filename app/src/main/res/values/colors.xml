@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="tabSelectText">#0000ee</color>
+    <color name="tabUnselectedText">#202020</color>
+
+    <color name="text_item_person_dark">#000000</color>
+    <color name="text_item_person_gray">#2C2C2C</color>
+    <color name="text_202020">#202020</color>
+    <color name="text_8a8a8a">#8a8a8a</color>
+    <color name="text_4d4a4a">#4d4a4a</color>
+    <color name="text_ff4848">#FF4848</color>
+    <color name="text_ffffff">#FFFFFF</color>
+    <color name="text_656bff">#656BFF</color>
+    <color name="text_4e4e4e">#4e4e4e</color>
+    <color name="text_999797">#999797</color>
+    <color name="text_25282f">#25282F</color>
+    <color name="text_161615">#161615</color>
+    <color name="text_5c5c5c">#5C5C5C</color>
+    <color name="text_333333">#333333</color>
+    <color name="text_111111">#111111</color>
+    <color name="text_ff657b">#FF657B</color>
+    <color name="text_green">#8AEEA0</color>
+    <color name="text_777777">#777777</color>
+    <color name="text_555555">#555555</color>
+    <color name="text_908f8f">#908F8F</color>
+
+
+    <color name="line_e9e9e9">#E9E9E9</color>
+    <color name="line_656bff">#656BFF</color>
+    <color name="line_8a8a8a">#8A8A8A</color>
+    <color name="line_ff657b">#FF657B</color>
+    <color name="line_e4e4e4">#E4E4E4</color>
+    <color name="bg_ffffff">#FFFFFF</color>
+    <color name="bg_f6f6f6">#F6F6F6</color>
+    <color name="bg_f7f7f7">#F7F7F7</color>
+    <color name="bg_656bff">#656BFF</color>
+    <color name="bg_disable">#E4E4E4</color>
+    <color name="bg_fcfcfc">#FCFCFC</color>
+    <color name="bg_393939">#393939</color>
+
+
+    <!--黄色 -->
+    <color name="bg_yellow">#FFFF00</color>
+
+
+
+</resources>

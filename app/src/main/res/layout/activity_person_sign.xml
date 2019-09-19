@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		tools:context=".mainprocess.myinfo.PersonsignActivity">
+
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:background="@color/bg_f6f6f6">
+
+		<!--toolbar-->
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/myinfo_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:background="@color/bg_ffffff"
+			app:contentInsetStart="0dp"
+			android:layout_gravity="center">
+
+
+			<FrameLayout
+				android:id="@+id/ic_person_back"
+				android:layout_width="25dp"
+				android:layout_height="25dp"
+				android:layout_marginLeft="14dp"
+				android:layout_marginStart="22dp">
+
+				<ImageView
+					android:layout_width="9dp"
+					android:layout_height="16dp"
+					android:src="@drawable/ic_back"
+					android:scaleType="centerCrop"
+					android:layout_gravity="center"/>
+			</FrameLayout>
+
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="个性标语"
+				android:textSize="16sp"
+				android:textColor="#202020"
+				android:layout_gravity="center"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/tv_person_finish"
+				android:layout_marginRight="18dp"
+				android:text="完成"
+				android:textSize="16sp"
+				android:textColor="#202020"
+				android:layout_gravity="center_vertical|end"/>
+		</androidx.appcompat.widget.Toolbar>
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="150dp"
+			android:layout_marginTop="10dp"
+			android:layout_marginLeft="15dp"
+			android:layout_marginRight="15dp"
+			android:background="@drawable/shape_circle_corner_white_big"
+			android:orientation="vertical">
+
+			<EditText
+				android:layout_width="match_parent"
+				android:layout_height="50dp"
+				android:id="@+id/et_person"
+				android:layout_marginLeft="22dp"
+				android:background="@null"
+				android:textCursorDrawable="@drawable/shape_edittext_cursor"
+				android:singleLine="true"
+				android:imeOptions="actionNone"
+				android:maxLength="15"
+				android:textColor="@color/text_333333"
+				android:textSize="14sp"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/tv_person_num"
+				android:textSize="12sp"
+				android:inputType="number"
+				android:text="15"
+				android:layout_marginEnd="13dp"
+				android:layout_marginBottom="10dp"
+				android:layout_gravity="end|bottom"/>
+		</FrameLayout>
+
+
+	</LinearLayout>
+</layout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="MyinfotvSize">12sp</dimen>
+	<dimen name="InfodetailtvSize">13sp</dimen>
+	<dimen name="directTv">11sp</dimen>
+</resources>

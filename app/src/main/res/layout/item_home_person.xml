@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+	<LinearLayout
+		android:id="@+id/item_person_layout"
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/shape_circle_corner"
+		android:layout_marginLeft="16dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginRight="16dp">
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="42dp"
+			android:layout_marginTop="12dp"
+			android:layout_marginBottom="12dp"
+			android:layout_marginLeft="16dp"
+			android:layout_marginRight="16dp">
+
+			<de.hdodenhof.circleimageview.CircleImageView
+				android:id="@+id/item_person_head"
+				android:layout_width="42dp"
+				android:layout_height="42dp"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintHorizontal_bias="0"
+				android:src="@drawable/ic_head"/>
+
+			<TextView
+				android:id="@+id/item_person_name"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:layout_constraintHorizontal_bias="0.18"
+				android:maxLength="4"
+				android:textSize="14sp"
+				android:textColor="@color/text_item_person_dark"
+				android:text="王杰王杰"/>
+
+			<TextView
+				android:id="@+id/item_person_graduate"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:layout_constraintHorizontal_bias="0.45"
+				android:textSize="12sp"
+				android:textColor="#6E6E6E"
+				android:text="2017级毕业生"/>
+
+			<Button
+				android:id="@+id/item_person_change_button"
+				android:layout_width="64dp"
+				android:layout_height="24dp"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintHorizontal_bias="1"
+				android:text="交换名片"
+				android:textSize="11sp"
+				android:textColor="#FEFEFE"
+				android:background="@drawable/shape_bt_enable"/>
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_marginLeft="16dp"
+			android:layout_marginRight="16dp"
+			android:background="@color/line_e9e9e9"/>
+
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:layout_marginTop="16dp"
+			android:layout_marginBottom="21dp"
+			android:layout_marginLeft="16dp"
+			android:layout_marginRight="16dp">
+
+			<TextView
+				android:id="@+id/item_home_tv_temp1"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="擅长部分："
+				android:textColor="@color/text_item_person_dark"
+				android:textSize="14sp"/>
+
+			<TextView
+				android:id="@+id/item_person_major"
+				app:layout_constraintLeft_toRightOf="@id/item_home_tv_temp1"
+				app:layout_constraintRight_toLeftOf="@id/item_home_tv_temp2"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="前端开asdaasdasdasd发"
+				android:textColor="@color/text_item_person_gray"
+				android:textSize="14sp"
+				android:singleLine="true"
+				android:ellipsize="marquee"/>
+
+			<TextView
+				android:id="@+id/item_home_tv_temp2"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				app:layout_constraintHorizontal_bias="0.63"
+				android:text="所在公司："
+				android:textColor="@color/text_item_person_dark"
+				android:textSize="14sp"/>
+
+			<TextView
+				android:id="@+id/item_person_company"
+				app:layout_constraintLeft_toRightOf="@id/item_home_tv_temp2"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:text="腾讯（深圳）科技有asdasdasd限公司"
+				android:textSize="14sp"
+				android:textColor="@color/text_item_person_gray"
+				android:singleLine="true"
+				android:ellipsize="marquee"/>
+
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
+	</LinearLayout>
+</layout>

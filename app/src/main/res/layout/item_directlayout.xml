@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	>
+
+	<LinearLayout
+		android:id="@+id/item＿layout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:orientation="horizontal">
+
+		<CheckBox
+			android:layout_width="wrap_content"
+			android:id="@+id/item_checkbox"
+			android:enabled="true"
+			android:focusable="true"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			style="@style/CustomCheckboxTheme"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/item_textview"
+			android:text="随便写写"
+			android:textColor="#111111"
+			android:textSize="@dimen/directTv"
+			android:layout_gravity="center_vertical"
+			android:layout_marginLeft="7dp"/>
+	</LinearLayout>
+
+</layout>

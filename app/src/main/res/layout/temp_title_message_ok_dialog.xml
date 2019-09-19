@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 xmlns:app="http://schemas.android.com/apk/res-auto"
+			 android:orientation="vertical"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@drawable/shape_circle_corner_white_big"
+		android:layout_marginLeft="62dp"
+		android:layout_marginRight="62dp"
+		android:layout_gravity="center">
+
+		<TextView
+			android:id="@+id/message_ok_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			android:text="获取访问相册权限"
+			android:textSize="18sp"
+			android:textColor="@color/text_202020"
+			android:layout_marginTop="22dp"/>
+
+		<TextView
+			android:id="@+id/message_ok_message"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			app:layout_constraintTop_toBottomOf="@id/message_ok_title"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			android:layout_marginTop="20dp"
+			android:layout_marginLeft="27dp"
+			android:layout_marginRight="27dp"
+			android:lineSpacingExtra="5dp"
+			android:text="请在-应用设置-权限-中，允许应用使用读写手机存储，来使应用能从相册中选取图片"
+			android:textSize="13sp"
+			android:textColor="@color/text_25282f"/>
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_constraintTop_toBottomOf="@id/message_ok_message"
+			app:layout_constraintBottom_toBottomOf="parent"
+			android:layout_marginTop="40dp"
+			android:layout_marginBottom="22dp">
+
+			<Button
+				android:id="@+id/message_ok_cancel"
+				android:layout_width="wrap_content"
+				android:layout_height="30dp"
+				android:text="确定"
+				android:textSize="16sp"
+				android:textColor="@color/text_ffffff"
+				android:layout_gravity="center"
+				android:background="@drawable/shape_bt_click"/>
+
+		</FrameLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

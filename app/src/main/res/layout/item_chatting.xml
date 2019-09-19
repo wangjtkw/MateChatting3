@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+		xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="12dp">
+
+		<TextView
+			android:id="@+id/chatting_time_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			android:text="2018/12/14 19:01"
+			android:textSize="10sp"
+			android:textColor="@color/text_908f8f"
+			android:visibility="visible"
+			tools:ignore="SmallSp"/>
+
+		<androidx.constraintlayout.widget.Group
+			android:id="@+id/chatting_other_group"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="visible"
+			app:constraint_referenced_ids="chatting_other_head,chatting_other_message_frame"/>
+
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/chatting_other_head"
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/chatting_time_text"
+			android:layout_marginStart="15dp"
+			android:layout_marginTop="12dp"
+			app:layout_goneMarginTop="0dp"
+			android:src="@drawable/ic_head"/>
+
+		<FrameLayout
+			android:id="@+id/chatting_other_message_frame"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:layout_constraintTop_toBottomOf="@id/chatting_time_text"
+			app:layout_constraintLeft_toRightOf="@id/chatting_other_head"
+			android:layout_marginStart="12dp"
+			android:layout_marginTop="12dp"
+			app:layout_goneMarginTop="0dp"
+			android:background="@drawable/shape_circle_corner"
+			android:visibility="gone">
+
+			<TextView
+				android:id="@+id/chatting_other_message_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:maxWidth="200dp"
+				android:layout_margin="13dp"
+				android:text="看看警方达拉斯看见达拉斯看见达拉斯爱撒娇的卢卡斯角度来看啊实打实的啊实打实的"
+				android:textSize="12sp"
+				android:textColor="@color/text_item_person_dark"/>
+
+		</FrameLayout>
+
+
+		<androidx.constraintlayout.widget.Group
+			android:id="@+id/chatting_user_group"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:constraint_referenced_ids="chatting_user_head,chatting_user_message_frame"/>
+
+		<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/chatting_user_head"
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/chatting_time_text"
+			android:layout_marginEnd="15dp"
+			android:layout_marginTop="12dp"
+			app:layout_goneMarginTop="0dp"
+			android:src="@drawable/ic_mine_head"/>
+
+		<FrameLayout
+			android:id="@+id/chatting_user_message_frame"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			app:layout_constraintTop_toBottomOf="@id/chatting_time_text"
+			app:layout_constraintRight_toLeftOf="@id/chatting_user_head"
+			android:layout_marginEnd="12dp"
+			android:layout_marginTop="12dp"
+			app:layout_goneMarginTop="0dp"
+			android:background="@drawable/shape_circle_corner">
+
+			<TextView
+				android:id="@+id/chatting_user_message_text"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:maxWidth="200dp"
+				android:layout_margin="13dp"
+				android:text="看看警方达拉斯看见达拉斯看见达拉斯爱撒娇的卢卡斯角度来看啊实打实的啊实打实的"
+				android:textSize="12sp"
+				android:textColor="@color/text_item_person_dark"/>
+
+		</FrameLayout>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

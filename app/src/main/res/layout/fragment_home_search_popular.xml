@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 xmlns:tools="http://schemas.android.com/tools"
+			 android:layout_width="match_parent"
+			 android:layout_height="match_parent"
+			 xmlns:app="http://schemas.android.com/apk/res-auto"
+			 tools:context=".mainprocess.homesearch.HomeSearchPopularFragment">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:layout_constraintTop_toBottomOf="@id/search_temp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		android:layout_marginLeft="15dp"
+		android:layout_marginRight="15dp"
+		android:layout_marginTop="23dp"
+		android:orientation="vertical">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="热门标签"
+			android:textSize="14sp"
+			android:textColor="@color/text_999797"
+			android:layout_marginLeft="10dp"/>
+
+		<com.nex3z.flowlayout.FlowLayout
+			android:id="@+id/search_flow_layout"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_marginTop="10dp"
+			android:layout_marginLeft="5dp"
+			android:layout_marginRight="5dp"
+			app:flChildSpacing="19dp"
+			app:flRowSpacing="11dp"/>
+
+	</LinearLayout>
+
+</FrameLayout>

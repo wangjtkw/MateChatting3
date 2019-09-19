@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	tools:context=".mainprocess.homesearch.HomeSearchActivity">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+		<!--toolbar-->
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/search_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			app:layout_constraintTop_toTopOf="parent"
+			android:background="@color/bg_ffffff"
+			app:contentInsetStart="0dp"
+			android:layout_gravity="center">
+
+			<FrameLayout
+				android:id="@+id/search_back"
+				android:layout_width="25dp"
+				android:layout_height="25dp"
+				android:layout_marginLeft="14dp"
+				android:layout_marginStart="22dp">
+
+				<ImageView
+					android:layout_width="9dp"
+					android:layout_height="16dp"
+					android:src="@drawable/ic_back"
+					android:scaleType="centerCrop"
+					android:layout_gravity="center"/>
+			</FrameLayout>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center"
+				android:text="搜索"
+				android:textSize="16sp"
+				android:textColor="@color/text_4e4e4e"/>
+
+		</androidx.appcompat.widget.Toolbar>
+
+		<LinearLayout
+			android:id="@+id/search_temp"
+			android:layout_width="match_parent"
+			android:layout_height="36dp"
+			android:orientation="horizontal"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/search_toolbar"
+			android:layout_marginTop="13dp"
+			android:layout_marginLeft="15dp"
+			android:layout_marginRight="15dp"
+			android:background="@drawable/shape_circle_corner">
+
+			<EditText
+				android:id="@+id/search_edit_text"
+				android:layout_width="0dp"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:background="@null"
+				android:inputType="text"
+				android:textCursorDrawable="@drawable/shape_edittext_cursor"
+				android:hint="请输入您的关键字"
+				android:imeOptions="actionSearch"
+				android:textSize="12sp"
+				android:textColor="@color/text_999797"
+				android:layout_gravity="center_vertical"
+				android:layout_marginStart="15dp"
+				android:lines="1"/>
+
+			<ImageView
+				android:id="@+id/search_clear_image"
+				android:layout_width="13dp"
+				android:layout_height="13dp"
+				android:src="@drawable/ic_edittext_clean"
+				android:layout_gravity="center_vertical"
+				android:layout_marginEnd="12dp"
+				android:layout_marginRight="12dp"
+				android:visibility="gone"/>
+
+			<ImageView
+				android:id="@+id/search_button"
+				android:layout_width="18dp"
+				android:layout_height="18dp"
+				android:src="@drawable/ic_search"
+				android:layout_marginEnd="15dp"
+				android:layout_gravity="center_vertical"/>
+
+		</LinearLayout>
+
+		<FrameLayout
+			android:id="@+id/search_frame"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/search_temp"
+			app:layout_constraintBottom_toBottomOf="parent"/>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

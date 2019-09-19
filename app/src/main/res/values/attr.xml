@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<declare-styleable name="FlowLayout">
+
+	</declare-styleable>
+	<declare-styleable name="StatusBarHeightView">
+		<attr name="use_type" format="integer">
+			<enum name="use_height" value="0"/>
+			<enum name="use_padding_top" value="1"/>
+		</attr>
+	</declare-styleable>
+
+	<declare-styleable name="SideView">
+		<attr name="textSize" format="dimension"/>
+		<attr name="chooseTextColor" format="color"/>
+		<attr name="unChooseTextColor" format="color"/>
+		<attr name="choose_BG_Color" format="color"/>
+	</declare-styleable>
+
+	<declare-styleable name="SearchView">
+	</declare-styleable>
+
+	<declare-styleable name="SlideFinishLayout">
+
+	</declare-styleable>
+
+	<declare-styleable name="CropView">
+		<!--遮罩颜色-->
+		<attr name="bgColor" format="color"></attr>
+		<attr name="maskColor" format="color"></attr>
+		<attr name="borderColor" format="color"></attr>
+		<attr name="radius" format="dimension"></attr>
+		<attr name="maxScale" format="float"></attr>
+		<attr name="doubleClickScale" format="float"></attr>
+	</declare-styleable>
+
+</resources>

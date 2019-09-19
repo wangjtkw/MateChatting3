@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@android:color/black">
+
+	<androidx.appcompat.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		app:layout_constraintTop_toTopOf="parent"
+		android:background="@color/bg_ffffff"
+		app:contentInsetStart="0dp"
+		android:layout_gravity="center">
+
+		<FrameLayout
+			android:id="@+id/clip_back"
+			android:layout_width="25dp"
+			android:layout_height="25dp"
+			android:layout_marginLeft="14dp"
+			android:layout_marginStart="22dp">
+
+		<ImageView
+			android:layout_width="9dp"
+			android:layout_height="16dp"
+			android:src="@drawable/ic_back"
+			android:scaleType="centerCrop"
+			android:layout_gravity="center"/>
+		</FrameLayout>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="移动和缩放"
+			android:textSize="16sp"
+			android:textColor="@color/text_4e4e4e"/>
+
+		<TextView
+			android:id="@+id/clip_text_over"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="end|center_vertical"
+			android:text="完成"
+			android:textSize="16sp"
+			android:textColor="@color/text_4e4e4e"
+			android:layout_marginEnd="16dp"/>
+
+	</androidx.appcompat.widget.Toolbar>
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<com.example.matechatting.myview.CropView
+			android:id="@+id/crop_view"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
+	</FrameLayout>
+
+</LinearLayout>

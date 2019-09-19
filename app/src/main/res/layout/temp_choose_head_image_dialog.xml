@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent">
+
+	<TextView
+		android:id="@+id/choose_head_from_album"
+		android:layout_width="match_parent"
+		android:layout_height="60dp"
+		android:text="从相册选择图片"
+		android:gravity="center"
+		android:background="@color/bg_ffffff"
+		android:textSize="16sp"
+		android:textColor="@color/text_202020"/>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+		android:background="@color/line_e9e9e9"/>
+
+	<TextView
+		android:id="@+id/choose_head_cancel"
+		android:layout_width="match_parent"
+		android:layout_height="60dp"
+		android:text="取消"
+		android:gravity="center"
+		android:background="@color/bg_ffffff"
+		android:textSize="16sp"
+		android:textColor="@color/text_202020"/>
+
+</LinearLayout>

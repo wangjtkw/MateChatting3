@@ -1,0 +1,9 @@
+<resources>
+	<string name="app_name">校友通讯录</string>
+	<string name="Appname">校友通讯录</string>
+	<string name="Wrongword">密码错误，请重新输入</string>
+
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="Noword">未填写</string>
+
+</resources>
