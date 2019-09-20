@@ -46,7 +46,7 @@ data class SearchBean(
                 @SerializedName("name")
                 var name: String,
                 @SerializedName("qq_account")
-                var qqAccount: Int,
+                var qqAccount: Long,
                 @SerializedName("slogan")
                 var slogan: String,
                 @SerializedName("stu_id")

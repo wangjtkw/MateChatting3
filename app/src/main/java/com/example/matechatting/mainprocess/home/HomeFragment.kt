@@ -155,11 +155,18 @@ class HomeFragment : BaseFragment() {
             Log.d("aaa", "点击的id $it")
             MainActivity.service?.addFriend(it, UUID.randomUUID().toString())
         }
-        callbackPersonLayout = {
-            val intent = Intent(requireActivity(), InfoDetailActivity::class.java)
-            intent.putExtra("id", it)
-            intent.putExtra("subject", HOME_ITEM)
-            requireActivity().startActivityForResult(intent, 0x999)
+        callbackPersonLayout = {id->
+            viewModel.getInfoDetail(id){
+                if (it){
+                    val intent = Intent(requireActivity(), InfoDetailActivity::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("subject", HOME_ITEM)
+                    requireActivity().startActivityForResult(intent, 0x999)
+                }else{
+                    ToastUtilWarning().setToast(requireContext(),"当前网络未连接")
+                }
+
+            }
         }
     }
 

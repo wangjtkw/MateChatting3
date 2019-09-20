@@ -16,11 +16,7 @@ import io.reactivex.schedulers.Schedulers
 class InfoDetailRepository(private val userInfoDao: UserInfoDao) : BaseRepository {
 
     fun getDetail(id: Int, callback: (UserBean) -> Unit) {
-        if (isNetworkConnected(MyApplication.getContext()) == NetworkState.NONE) {
-            getDetailFromDB(id, callback)
-        } else {
-            getDetailFromNet(id, callback)
-        }
+        getDetailFromDB(id, callback)
     }
 
     private fun getDetailFromDB(id: Int, callback: (UserBean) -> Unit) {
@@ -29,7 +25,9 @@ class InfoDetailRepository(private val userInfoDao: UserInfoDao) : BaseRepositor
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 callback(it)
-            }, {})
+            }, {
+                getDetailFromNet(id, callback)
+            })
     }
 
     private fun getDetailFromNet(id: Int, callback: (UserBean) -> Unit) {
@@ -55,7 +53,7 @@ class InfoDetailRepository(private val userInfoDao: UserInfoDao) : BaseRepositor
         userBean.apply {
             if (!directions.isNullOrEmpty()) {
                 val sb = java.lang.StringBuilder()
-                for (s:String in directions!!){
+                for (s: String in directions!!) {
                     sb.append(" ")
                     sb.append(s)
                 }

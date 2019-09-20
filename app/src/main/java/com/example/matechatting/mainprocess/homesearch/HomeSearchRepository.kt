@@ -5,6 +5,7 @@ import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.bean.SearchBean
 import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.network.SearchService
+import com.example.matechatting.utils.ExecuteObserver
 import com.example.matechatting.utils.runOnNewThread
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -15,19 +16,19 @@ class HomeSearchRepository : BaseRepository {
         IdeaApi.getApiService(SearchService::class.java).getResult(key, page, size)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .subscribe(ExecuteObserver(onExecuteNext = {
+                Log.d("aaa", "getResult" + it.toString())
                 if (it.success) {
                     Log.d("aaa", "getResult" + it.toString())
                     callback(setInfo(it.payload))
                 } else {
                     callback(ArrayList())
                 }
-            }, {
+            }, onExecuteError = {
+                Log.d("aaa", "getResult Error ")
                 callback(ArrayList())
-            })
+            }))
     }
-
-
 
 
     private fun setBeanInfo(userBean: SearchBean.Payload.MyArray.Map) {

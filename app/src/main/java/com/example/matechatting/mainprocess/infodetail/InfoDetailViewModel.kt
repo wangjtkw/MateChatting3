@@ -5,13 +5,13 @@ import android.widget.ImageView
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.bumptech.glide.Glide
-import com.example.matechatting.BASE_URL
-import com.example.matechatting.MORE_BASE
-import com.example.matechatting.PATH
-import com.example.matechatting.R
+import com.example.matechatting.*
 import com.example.matechatting.bean.UserBean
+import com.example.matechatting.mainprocess.repository.UserBeanRepository
+import com.example.matechatting.utils.runOnNewThread
+import java.lang.StringBuilder
 
-class InfoDetailViewModel(private val repository: InfoDetailRepository) : ViewModel() {
+class InfoDetailViewModel(private val repository: UserBeanRepository) : ViewModel() {
     val detailName = ObservableField("未填写")
     val detailMajor = ObservableField("未填写")
     val detailGraduate = ObservableField("未填写")
@@ -27,7 +27,7 @@ class InfoDetailViewModel(private val repository: InfoDetailRepository) : ViewMo
     val defaultSlogan = "快乐生活每一天"
 
     fun getDetail(id: Int, headImageView: ImageView, callback: (UserBean) -> Unit) {
-        repository.getDetail(id) {
+        repository.getUserBeanFromDB(id) {
             callback(it)
             Log.d("aaa", "当前user $it ")
             it.apply {
@@ -94,15 +94,27 @@ class InfoDetailViewModel(private val repository: InfoDetailRepository) : ViewMo
     }
 
     private fun setHeadImage(headImage: ImageView, imageUrl: String) {
-        val sb = StringBuilder()
-        sb.append(BASE_URL)
-            .append(MORE_BASE)
-            .append(PATH)
-            .append(imageUrl)
-        Glide.with(headImage.context)
-            .load(sb.toString())
-            .error(R.drawable.ic_head)
-            .into(headImage)
+        Log.d("aaa", "imageUrl $imageUrl")
+        val start = "/data/user"
+        if (imageUrl.startsWith(start)) {
+            Glide.with(headImage.context)
+                .load(imageUrl)
+                .error(R.drawable.ic_head)
+                .into(headImage)
+        } else {
+            val sb = StringBuilder()
+            sb.append(BASE_URL)
+                .append(MORE_BASE)
+                .append(PATH)
+                .append(imageUrl)
+            runOnNewThread {
+                Glide.with(headImage)
+                    .load(sb.toString())
+                    .error(R.drawable.ic_head)
+                    .into(headImage)
+            }
+        }
+
     }
 
 

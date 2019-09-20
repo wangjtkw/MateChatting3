@@ -94,7 +94,10 @@ object InjectorUtils {
     }
 
     fun provideHomeItemViewModelFactory(context: Context): HomeItemViewModelFactory {
-        return HomeItemViewModelFactory(getHomeItemRepository(context))
+        return HomeItemViewModelFactory(
+            getHomeItemRepository(context),
+            getUserBeanRepository(context)
+        )
     }
 
     fun getInfoDetailRepository(context: Context): InfoDetailRepository {
@@ -104,7 +107,7 @@ object InjectorUtils {
     }
 
     fun provideInfoDetailViewModelFactory(context: Context): InfoDetailViewModelFactory {
-        return InfoDetailViewModelFactory(getInfoDetailRepository(context))
+        return InfoDetailViewModelFactory(getUserBeanRepository(context))
     }
 
     fun getMineRepository(context: Context): MineRepository {
@@ -148,7 +151,7 @@ object InjectorUtils {
     }
 
     fun provideHomeSearchViewModelFactory(context: Context): HomeSearchViewModelFactory {
-        return HomeSearchViewModelFactory(HomeSearchRepository())
+        return HomeSearchViewModelFactory(HomeSearchRepository(), getUserBeanRepository(context))
     }
 
     fun getDirectionActivityRepository(context: Context): DirectionActivityRepository {
