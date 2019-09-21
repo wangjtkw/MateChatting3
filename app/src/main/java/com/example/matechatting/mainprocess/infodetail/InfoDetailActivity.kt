@@ -18,7 +18,9 @@ import com.example.matechatting.databinding.ActivityInfoDetailBinding
 import com.example.matechatting.mainprocess.chatting.ChattingActivity
 import com.example.matechatting.mainprocess.main.MainActivity
 import com.example.matechatting.utils.InjectorUtils
+import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.ToastUtilWarning
+import com.example.matechatting.utils.isNetworkConnected
 import com.example.matechatting.utils.statusbar.StatusBarUtil
 import java.util.*
 
@@ -60,11 +62,12 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
         viewModel = ViewModelProviders.of(this, factory).get(InfoDetailViewModel::class.java)
         back = binding.infoDetailBack
         headImage = binding.infoDetailHeadImage
-        viewModel.getDetail(id,headImage) {
+        viewModel.getDetail(id, headImage) {
             userBean = it
+            initButton()
         }
         binding.viewmodel = viewModel
-        initButton()
+
     }
 
     private fun initButton() {
@@ -82,6 +85,7 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
                 changeButton.visibility = View.GONE
                 chattingButton.visibility = View.GONE
                 acceptButton.visibility = View.VISIBLE
+                initAccept()
             }
             NEW_CHATTING, FRIEND -> {
                 changeButton.visibility = View.GONE
@@ -106,6 +110,19 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
         intentFilter = IntentFilter()
         intentFilter.addAction(ADD_FRIEND_REQUEST_BROADCAST_ACTION)
         registerReceiver(receiver, intentFilter)
+    }
+
+    private fun initAccept() {
+        acceptButton.setOnClickListener {
+            if (isNetworkConnected(this) == NetworkState.NONE) {
+                ToastUtilWarning().setToast(this, "当前网络未连接")
+            } else {
+                viewModel.updateState(userBean, 4) {
+                    MainActivity.service?.acceptFriend(id)
+                    finish()
+                }
+            }
+        }
     }
 
     private fun initChatting() {

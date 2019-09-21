@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagedList
+import com.example.matechatting.MyApplication
 import com.example.matechatting.bean.ChattingBean
 
 class ChattingViewModel(private val repository: ChattingRepository) : ViewModel() {
@@ -28,7 +29,7 @@ class ChattingViewModel(private val repository: ChattingRepository) : ViewModel(
         }
     }
 
-    fun updateState(state: Int, otherId: Int, callback: () -> Unit = {}) {
-        repository.changeState(state, otherId, callback)
+    fun updateState(otherId: Int, callback: () -> Unit = {}) {
+        repository.changeState(MyApplication.getUserId()!!, otherId, callback)
     }
 }

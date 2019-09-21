@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.matechatting.bean.*
 
 @Database(
-    entities = [AccountBean::class, HomeItemBean::class, UserBean::class, ChattingBean::class, DirectionBean::class],
+    entities = [AccountBean::class, HasMessageBean::class, HomeItemBean::class, UserBean::class, ChattingBean::class, DirectionBean::class],
     version = 1,
     exportSchema = false
 )
@@ -17,6 +17,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userInfoDao(): UserInfoDao
     abstract fun chattingDao(): ChattingDao
     abstract fun directionDao(): DirectionDao
+    abstract fun hasMessageDao(): HasMessageDao
 
     companion object {
         @Volatile

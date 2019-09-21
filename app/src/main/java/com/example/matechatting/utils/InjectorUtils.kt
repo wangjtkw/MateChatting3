@@ -56,7 +56,7 @@ object InjectorUtils {
 
     fun provideLoginViewModelFactory(context: Context): LoginViewModelFactory {
         val repository = getLoginRepository(context)
-        return LoginViewModelFactory(repository)
+        return LoginViewModelFactory(repository, getUserBeanRepository(context))
     }
 
     fun provideBindPhoneViewModelFactory(context: Context): BindPhoneViewModelFactory {
@@ -176,7 +176,8 @@ object InjectorUtils {
 
     fun getMileListRepository(context: Context): MileListRepository {
         return MileListRepository.getInstance(
-            AppDatabase.getInstance(context.applicationContext).userInfoDao()
+            AppDatabase.getInstance(context).userInfoDao(),
+            AppDatabase.getInstance(context).hasMessageDao()
         )
     }
 
@@ -200,8 +201,9 @@ object InjectorUtils {
 
     fun getChattingRepository(context: Context): ChattingRepository {
         return ChattingRepository.getInstance(
-            AppDatabase.getInstance(context.applicationContext).chattingDao(),
-            AppDatabase.getInstance(context.applicationContext).userInfoDao()
+            AppDatabase.getInstance(context).chattingDao(),
+            AppDatabase.getInstance(context).userInfoDao(),
+            AppDatabase.getInstance(context).hasMessageDao()
         )
     }
 

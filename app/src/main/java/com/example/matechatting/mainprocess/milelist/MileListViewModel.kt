@@ -10,7 +10,7 @@ class MileListViewModel(private val repository: MileListRepository) : ViewModel(
     }
 
     fun getAllNewChatting(callback: (List<UserBean>) -> Unit) {
-        repository.getUserByState(3, callback)
+        repository.getAllNewChatting(callback)
     }
 
     fun getAllFriend(callback: (List<UserBean>) -> Unit) {

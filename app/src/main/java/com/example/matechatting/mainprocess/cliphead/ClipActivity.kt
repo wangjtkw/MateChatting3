@@ -31,10 +31,12 @@ class ClipActivity : AppCompatActivity() {
     private lateinit var over: TextView
     private lateinit var clipView: CropView
     private lateinit var viewModel: ClipViewModel
+    private var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_clip)
+        token = intent.getStringExtra("token") ?: ""
         StatusBarUtil.setRootViewFitsSystemWindows(this, true)
         StatusBarUtil.setStatusBarDarkTheme(this, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -92,7 +94,7 @@ class ClipActivity : AppCompatActivity() {
                 if (outputStream != null) {
                     zoomedCropBitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
                 }
-                viewModel.postImage(file){
+                viewModel.postImage(file,token){
                     val intent = Intent(this, MineFragment::class.java)
                     intent.putExtra("image_path",file.absolutePath)
                     setResult(Activity.RESULT_OK, intent)

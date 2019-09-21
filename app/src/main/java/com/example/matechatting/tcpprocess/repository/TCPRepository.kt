@@ -7,8 +7,10 @@ import com.example.matechatting.MORE_BASE
 import com.example.matechatting.MyApplication
 import com.example.matechatting.PATH
 import com.example.matechatting.bean.ChattingBean
+import com.example.matechatting.bean.HasMessageBean
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.AppDatabase
+import com.example.matechatting.mainprocess.chatting.ChattingActivity.Companion.id
 import com.example.matechatting.mainprocess.repository.UserBeanRepository
 import com.example.matechatting.network.GetAllFriendService
 import com.example.matechatting.network.GetOnlineStateService
@@ -48,9 +50,23 @@ object TCPRepository {
         IdeaApi.getApiService(GetUserByIdService::class.java).getUser(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .subscribe(ExecuteObserver(onExecuteNext = {
                 setUserBeanInfo(it, state, "", callback)
-            }, {})
+            }))
+    }
+
+    fun changeHasMessage(userId: Int, otherId: Int, callback: () -> Unit = {}) {
+        val hasMessageBean = HasMessageBean(otherId,userId,true)
+        AppDatabase.getInstance(MyApplication.getContext()).hasMessageDao().insertUserInfo(hasMessageBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess {
+                callback()
+            }
+            .doOnError {
+
+            }
+            .subscribe()
     }
 
     fun changeUserState(state: Int, id: Int, callback: () -> Unit) {
@@ -204,12 +220,28 @@ object TCPRepository {
         AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().updateOnLineState(state, id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .doOnSuccess {
                 callback()
                 Log.d("aaa", "更新成功")
-            }, {
+            }
+            .doOnError {
                 it.printStackTrace()
-            })
+            }
+            .subscribe()
+    }
+
+    fun updateOnLineStateList(state: Boolean, ids: List<Int>, callback: () -> Unit = {}) {
+        AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().updateOnlineStateList(state, ids)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess {
+                callback()
+                Log.d("aaa", "更新成功")
+            }
+            .doOnError {
+                it.printStackTrace()
+            }
+            .subscribe()
     }
 
     fun getAllIdFromDB(callback: (List<Int>) -> Unit) {

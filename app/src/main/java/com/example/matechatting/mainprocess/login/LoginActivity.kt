@@ -205,9 +205,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                 }
                 LoginState.NOT_FIRST -> {
                     viewModel.getUserInfo {
-                        val intent = Intent(this, MainActivity::class.java)
-                        setResult(Activity.RESULT_OK, intent)
-                        finish()
+                        viewModel.getUserFriends {
+                            val intent = Intent(this, MainActivity::class.java)
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        }
                     }
                 }
             }

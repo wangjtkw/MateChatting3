@@ -57,7 +57,11 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         name = intent.getStringExtra("name") ?: ""
 
         Log.d("bbb", "ChattingActivity onCreate")
-        canSlideFinish(true)
+        canSlideFinish(true, true) {
+            updateState {
+                finish()
+            }
+        }
         initBinding()
         initView()
         updateState()
@@ -71,7 +75,7 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("bbb", "ChattingActivity onDestroy")
-        updateState()
+
         id = 0
     }
 
@@ -88,8 +92,8 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
         title.text = name
     }
 
-    private fun updateState() {
-        viewModel.updateState(4, id)
+    private fun updateState(callback: () -> Unit = {}) {
+        viewModel.updateState(id, callback)
     }
 
     private fun initRecycler() {
@@ -120,10 +124,12 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
             EditTextTextChangeListener({
                 if (it.isEmpty()) {
                     send.isEnabled = false
-                    send.background = this.getDrawable(com.example.matechatting.R.drawable.shape_send_button_corner_disabled)
+                    send.background =
+                        this.getDrawable(com.example.matechatting.R.drawable.shape_send_button_corner_disabled)
                 } else {
                     send.isEnabled = true
-                    send.background = this.getDrawable(com.example.matechatting.R.drawable.shape_send_button_corner_available)
+                    send.background =
+                        this.getDrawable(com.example.matechatting.R.drawable.shape_send_button_corner_available)
                 }
             })
         )
@@ -185,14 +191,17 @@ class ChattingActivity : BaseActivity<ActivityChattingBinding>() {
 
     private fun initBack() {
         back.setOnClickListener {
-            finish()
+            updateState {
+                finish()
+            }
         }
     }
 
     override fun getLayoutId(): Int {
         return com.example.matechatting.R.layout.activity_chatting
     }
-    companion object{
+
+    companion object {
         var id = 0
     }
 }

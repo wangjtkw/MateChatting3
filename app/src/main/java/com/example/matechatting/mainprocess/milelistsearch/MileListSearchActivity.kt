@@ -75,7 +75,11 @@ class MileListSearchActivity : BaseActivity<ActivityMileListSearchBinding>() {
         }
         recycler.adapter = adapter
         viewModel.searchData.observe(this, Observer {
-            adapter.freshData(it)
+            if (it.isNullOrEmpty()){
+                ToastUtilWarning().setToast(this,"当前关键字无搜索结果")
+            }else{
+                adapter.freshData(it)
+            }
         })
     }
 

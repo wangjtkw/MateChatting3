@@ -93,6 +93,10 @@ class InfoDetailViewModel(private val repository: UserBeanRepository) : ViewMode
         }
     }
 
+    fun updateState(userBean: UserBean,state:Int,callback: () -> Unit){
+        repository.updateState(userBean, state, callback)
+    }
+
     private fun setHeadImage(headImage: ImageView, imageUrl: String) {
         Log.d("aaa", "imageUrl $imageUrl")
         val start = "/data/user"

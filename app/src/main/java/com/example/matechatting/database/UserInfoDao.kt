@@ -25,8 +25,11 @@ interface UserInfoDao {
     @Query("SELECT * FROM user_info WHERE state = :state")
     fun getUserInfoByState(state: Int): Single<List<UserBean>>
 
-    @Query("SELECT * FROM user_info WHERE state = 3 OR state = 4")
+    @Query("SELECT * FROM user_info WHERE state = 4")
     fun getAllFriend(): Single<List<UserBean>>
+
+    @Query("SELECT * FROM user_info WHERE id IN (:ids)")
+    fun getAllNewChatting(ids: List<Int>): Single<List<UserBean>>
 
     @Delete
     fun deleteUserInfo(userBean: UserBean): Single<Int>
@@ -36,11 +39,14 @@ interface UserInfoDao {
     fun selectUserByKey(key: String, state: Int = 4): Single<List<UserBean>>
 
     @Query("UPDATE user_info SET on_line = :state WHERE id  = :id")
-    fun updateOnLineState(state: Boolean, id: Int):Single<Int>
+    fun updateOnLineState(state: Boolean, id: Int): Single<Int>
 
     @Query("SELECT profile_photo FROM user_info WHERE id = :id")
     fun getHeadImage(id: Int): Single<String>
 
     @Query("UPDATE user_info SET state = :state WHERE id  = :id")
-    fun updateState(state: Int, id: Int):Single<Int>
+    fun updateState(state: Int, id: Int): Single<Int>
+
+    @Query("UPDATE user_info SET on_line = :state WHERE id IN (:ids)")
+    fun updateOnlineStateList(state: Boolean, ids: List<Int>): Single<Int>
 }

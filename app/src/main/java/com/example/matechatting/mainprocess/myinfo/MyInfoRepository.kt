@@ -2,7 +2,10 @@ package com.example.matechatting.mainprocess.myinfo
 
 import android.util.Log
 import com.bumptech.glide.Glide
+import com.example.matechatting.BASE_URL
+import com.example.matechatting.MORE_BASE
 import com.example.matechatting.MyApplication
+import com.example.matechatting.PATH
 import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.bean.DirectionBean
 import com.example.matechatting.bean.PostUserBean
@@ -10,7 +13,9 @@ import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.DirectionDao
 import com.example.matechatting.database.AccountDao
 import com.example.matechatting.database.UserInfoDao
+import com.example.matechatting.mainprocess.login.LoginRepository
 import com.example.matechatting.network.*
+import com.example.matechatting.utils.ExecuteObserver
 import com.example.matechatting.utils.PinyinUtil
 import com.example.matechatting.utils.runOnNewThread
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,20 +30,6 @@ class MyInfoRepository(
     fun saveMyInfo(userBean: UserBean, callback: () -> Unit, token: String = "") {
         saveInDB(userBean)
         saveInNet(userBean, callback, token)
-    }
-
-    private fun saveInDB(userBean: UserBean) {
-        Log.d("aaa","saveInDB $userBean")
-        userBean.pinyin = PinyinUtil.getFirstHeadWordChar(userBean.name)
-        userInfoDao.insertUserInfo(userBean)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                Log.d("aaa", "保存成功 $it")
-            }, {
-                Log.d("aaa", "MyInfoRepository saveInDB")
-                it.printStackTrace()
-            })
     }
 
     fun saveHeadImagePath(url: String) {
@@ -118,8 +109,7 @@ class MyInfoRepository(
         return postUserBean
     }
 
-
-    fun getMyInfoFromNet(callback: (UserBean) -> Unit, token: String = "") {
+    fun getUserBeanFromNet(token: String = "", callback: (UserBean) -> Unit = {}) {
         val service: GetMyInfoService = if (token.isEmpty()) {
             IdeaApi.getApiService(GetMyInfoService::class.java)
         } else {
@@ -128,13 +118,134 @@ class MyInfoRepository(
         service.getMyInfo()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                val info = setInfo(it)
-                saveInDB(info)
-                callback(info)
-            }, {
-                getMyInfoFromDB(callback)
-            })
+            .subscribe(ExecuteObserver(onExecuteNext = {
+                Log.d(TAG, "getUserBeanFromNet 网络请求返回UserBean -> $it")
+                setUserBeanInfo(it, 1, token, callback)
+            }))
+    }
+
+    /**
+     *设置UserBean的信息，并调用存储
+     * @param state:该UserBean是什么类型的
+     * @param state:0(陌生人)，1（自己），2（新好友），3（聊天好友），4（好友）
+     * @param userBean:网络请求得到的数据类
+     */
+    private fun setUserBeanInfo(userBean: UserBean, state: Int, token: String = "", callback: (UserBean) -> Unit = {}) {
+        //设置UserBean的类型
+        var saveTemp = setState(userBean, state)
+        //提取UserBean姓名的首字母
+        saveTemp = setFirstPinYin(saveTemp)
+        //设置UserBean的方向及入学年
+        saveTemp = setInfo(saveTemp)
+        //如果有头像信息，则缓存入本地，并返回缓存路径
+        if (!saveTemp.headImage.isNullOrEmpty()) {
+            saveHeadImagePath(saveTemp) {
+                if (token.isEmpty()) {
+                    saveInDB(it)
+                }
+                callback(it)
+            }
+        } else {
+            if (token.isEmpty()) {
+                saveInDB(saveTemp)
+            }
+            callback(saveTemp)
+        }
+    }
+
+    /**
+     * 将UserBean数据类存入数据库
+     * @param userBean:基本信息完全的数据类
+     */
+    private fun saveInDB(userBean: UserBean) {
+        userInfoDao.insertUserInfo(userBean)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess {
+                Log.d(TAG, "saveInDB 数据库保存成功")
+            }
+            .doOnError {
+                Log.d(TAG, "saveInDB 数据库存储错误")
+                Log.d(TAG, it?.message ?: "")
+            }
+            .subscribe()
+    }
+
+    /**
+     * 将网络请求的UserBean中的@link [UserBean.directions] 和 @link [UserBean.graduationYear]
+     * 转化拼接为在界面的字符串，存入@link [UserBean.direction] 和 @link[UserBean.graduation]
+     * @param result:信息未改变的UserBean
+     * @return 信息更改后的UserBean
+     */
+    private fun setInfo(result: UserBean): UserBean {
+
+        result.directions?.apply {
+            val sb = StringBuilder()
+            for (s: String in this) {
+                sb.append(" ")
+                sb.append(s)
+            }
+            result.direction = sb.toString().trim()
+        }
+        val sb = StringBuilder()
+        sb.append(result.graduationYear)
+        sb.append("年入学")
+        result.graduation = sb.toString()
+        Log.d(TAG, "setInfo 传入的方向 -> ${result.directions}")
+        Log.d(TAG, "setInfo 转化后的方向 -> ${result.direction}")
+        Log.d(TAG, "setInfo 传入的入学年 -> ${result.graduationYear}")
+        Log.d(TAG, "setInfo 转化后的入学年 -> ${result.graduation}")
+        return result
+    }
+
+    /**
+     * 将从服务器获取来的头像图片链接用Glide缓存到本地，并将缓存路径放入UserBean的头像路径中
+     *@param result:从服务器获取来的数据类，用于获取其头像路径，需进行拼接后才可进行Glide加载
+     * @param callback:将更改了头像路径的UserBean返回
+     */
+    private fun saveHeadImagePath(result: UserBean, callback: (UserBean) -> Unit) {
+        if (result.headImage.isNullOrEmpty()) {
+            return
+        }
+        val start = result.headImage!!.startsWith("/data/user/0/")
+        if (start) {
+            return
+        }
+        val sb = StringBuilder()
+        sb.append(BASE_URL)
+            .append(MORE_BASE)
+            .append(PATH)
+            .append(result.headImage)
+        runOnNewThread {
+            val target = Glide.with(MyApplication.getContext())
+                .asFile()
+                .load(sb.toString())
+                .submit()
+            val cachePath = target.get().absolutePath
+            Log.d(TAG, "saveHeadImagePath 头像缓存路径 -> $cachePath")
+            result.headImage = cachePath
+            callback(result)
+        }
+    }
+
+    /**
+     * 设置UserBean的状态
+     * @param result: 需要更新的UserBean
+     * @param state:需要更新成什么状态
+     * @param state:0(陌生人)，1（自己），2（新好友），3（聊天好友），4（好友）
+     */
+    private fun setState(result: UserBean, state: Int): UserBean {
+        result.state = state
+        return result
+    }
+
+    /**
+     * 获取UserBean姓名的首字母
+     * @param result:需要获取首字母的UserBean
+     */
+    private fun setFirstPinYin(result: UserBean): UserBean {
+        result.pinyin = PinyinUtil.getFirstHeadWordChar(result.name)
+        return result
     }
 
     fun getMyInfoFromDB(callback: (UserBean) -> Unit) {
@@ -150,24 +261,6 @@ class MyInfoRepository(
                 it.printStackTrace()
             })
 
-    }
-
-    private fun setInfo(userBean: UserBean): UserBean {
-        userBean.apply {
-            if (!directions.isNullOrEmpty()) {
-                val sb = StringBuilder()
-                for (s: String in directions!!) {
-                    sb.append(" ")
-                    sb.append(s)
-                }
-                direction = sb.toString().trim()
-            }
-            val sb = StringBuilder()
-            sb.append(graduationYear)
-            sb.append("年入学")
-            graduation = sb.toString()
-        }
-        return userBean
     }
 
     fun getAllBigDirection(parentId: Int, callback: () -> Unit) {
@@ -210,6 +303,7 @@ class MyInfoRepository(
 
 
     companion object {
+        private const val TAG = "MyInfoRepository"
         @Volatile
         private var instance: MyInfoRepository? = null
 

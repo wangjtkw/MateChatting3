@@ -20,9 +20,11 @@ class AlbumActivity : BaseActivity<ActivityAlbumBinding>() {
     private lateinit var adapter: AlbumRecyclerAdapter
     private lateinit var back:FrameLayout
     private lateinit var recyclerCallBack:(url:String) ->Unit
+    private var token = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        token = intent.getStringExtra("token") ?: ""
         StatusBarUtil.setRootViewFitsSystemWindows(this, true)
         StatusBarUtil.setStatusBarDarkTheme(this, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -40,6 +42,7 @@ class AlbumActivity : BaseActivity<ActivityAlbumBinding>() {
         recyclerCallBack = {
             val intent = Intent(this, ClipActivity::class.java)
             intent.putExtra("image_uri",it)
+            intent.putExtra("token", token)
             startActivityForResult(intent, CLIP_REQUEST_CODE)
         }
     }

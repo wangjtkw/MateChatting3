@@ -141,7 +141,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             val qqStr = tv_qq.text.toString().trim()
             qqAccount = if (qqStr.isNotEmpty() && QQ_REGEX.find(qqStr) != null) {
                 qqStr.toLong()
-            }else{
+            } else {
                 0L
             }
             wechatAccount = tv_weixin.text.toString().trim()
@@ -185,7 +185,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             val intent = Intent(this, MainActivity::class.java)
             setResult(Activity.RESULT_OK, intent)
         }
-        Log.d("aaa","doOnSaveSuccess 调用")
+        Log.d("aaa", "doOnSaveSuccess 调用")
         finish()
     }
 
@@ -199,26 +199,19 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
         val factory = InjectorUtils.provideMyInfoViewModelFactory(this)
         viewModel = ViewModelProviders.of(this, factory).get(MyInfoViewModel::class.java)
         viewModel.getMyInfo({
-            setHeadImage(it.headImage!!)
             userBeanSave = it
             userBean = userBeanSave.copy()
             viewModel.getDirection(it.direction)
+            setHeadImage(it.headImage!!)
         }, token)
         binding.viewmodel = viewModel
     }
 
-    private fun setHeadImage(imageUrl:String){
-        val end = imageUrl.endsWith(".jpg")
-        if (end){
-            val bitmap = BitmapFactory.decodeFile(imageUrl)
-            headImage.setImageBitmap(bitmap)
-            Log.d("aaa","加载本地图片")
-        }else{
-            Glide.with(headImage.context)
-                .load(imageUrl)
-                .error(R.drawable.ic_head)
-                .into(headImage)
-        }
+    private fun setHeadImage(imageUrl: String) {
+        Glide.with(headImage.context)
+            .load(imageUrl)
+            .error(R.drawable.ic_head)
+            .into(headImage)
     }
 
     private fun initView() {
@@ -318,6 +311,9 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
 
     override fun doOnGetPermission() {
         val intent = Intent(this, AlbumActivity::class.java)
+        if (token.isNotEmpty()) {
+            intent.putExtra("token", token)
+        }
         transferActivity(intent, ALBUM_REQUEST_CODE)
     }
 
@@ -350,9 +346,9 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             //            if (isNetworkConnected(this) == NetworkState.NONE) {
 //                ToastUtilWarning().setToast(this, "当前网络未连接")
 //            } else {
-            viewModel.getDirection(userBeanSave.direction){
+            viewModel.getDirection(userBeanSave.direction) {
                 val intent = Intent(this, DirectionNewActivity::class.java)
-                intent.putExtra("token",token  )
+                intent.putExtra("token", token)
                 startActivityForResult(intent, DIRECT_REQUEST_CODE)
             }
 
@@ -362,6 +358,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == PERSON_SIGN_REQUEST_CODE && data != null) {
             val personSign: String = data.getStringExtra("personSign") ?: ""
             this.userBeanSave.slogan = personSign
@@ -370,10 +367,10 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
         if (resultCode == Activity.RESULT_OK && requestCode == ALBUM_REQUEST_CODE && data != null) {
             val path = data.getStringExtra("image_path")
             if (!path.isNullOrEmpty()) {
-                val bitmap = BitmapFactory.decodeFile(path)
-                headImage.setImageBitmap(bitmap)
+//                val bitmap = BitmapFactory.decodeFile(path)
+//                headImage.setImageBitmap(bitmap)
                 userBeanSave.headImage = path
-//                Glide.with(this).load(uri).into(headImage)
+                Glide.with(this).load(path).into(headImage)
             }
         }
         if (resultCode == Activity.RESULT_OK && requestCode == DIRECT_REQUEST_CODE && data != null) {
@@ -381,7 +378,7 @@ class MyinfoActivity : PermissionActivity<ActivityMyInfoBinding>() {
             userBeanSave.direction = direction
             userBean.direction = direction
             viewModel.saveData(userBean)
-            Log.d("aaa","返回信息 ${userBeanSave.direction}")
+            Log.d("aaa", "返回信息 ${userBeanSave.direction}")
         }
     }
 

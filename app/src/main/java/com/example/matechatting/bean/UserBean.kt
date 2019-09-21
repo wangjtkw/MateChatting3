@@ -62,7 +62,7 @@ data class UserBean(
     var first: Boolean = false
 
     /**
-     * state:0(陌生人)，1（自己），2（新好友），3（聊天好友），4（好友）
+     * state:0(陌生人)，1（自己），2（新好友），4（好友）
      */
     var state: Int = 0
     @ColumnInfo(name = "on_line")

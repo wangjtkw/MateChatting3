@@ -8,15 +8,15 @@ import java.io.File
 
 class ClipViewModel(private val repository: ClipRepository) : ViewModel() {
 
-    fun postImage(file: File, callback: () -> Unit) {
+    fun postImage(file: File, token: String, callback: () -> Unit) {
         val requestBody = RequestBody.create(MediaType.parse("image/jpg"), file)
         val body = MultipartBody.Part.createFormData("profile_photo", file.name, requestBody)
-        repository.postImage(body)
+        repository.postImage(body, token)
         val path = file.absolutePath
-        saveHeadInDB(path,callback)
+        saveHeadInDB(path, token,callback)
     }
 
-    private fun saveHeadInDB(filePath: String,callback: () -> Unit) {
-        repository.saveInDB(filePath,callback)
+    private fun saveHeadInDB(filePath: String, token: String, callback: () -> Unit) {
+        repository.saveInDB(filePath, token, callback)
     }
 }

@@ -31,11 +31,11 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
                 callback(it)
             }
         } else {
-            repository.getMyInfoFromNet({
+            repository.getUserBeanFromNet (token) {
                 Log.d("aaa","第一次登陆返回数据 $it")
                 setInfoNet(it)
                 callback(it)
-            }, token)
+            }
         }
     }
 
@@ -109,12 +109,7 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
             myInfoCity.set(city)
             myInfoSlogan.set(slogan)
             if (!headImage.isNullOrEmpty()) {
-                val sb = StringBuilder()
-                sb.append(BASE_URL)
-                sb.append(PATH)
-                sb.append(headImage)
-                myInfoHeadImage.set(sb.toString())
-                repository.saveHeadImagePath(sb.toString())
+                myInfoHeadImage.set(headImage)
             }
         }
     }

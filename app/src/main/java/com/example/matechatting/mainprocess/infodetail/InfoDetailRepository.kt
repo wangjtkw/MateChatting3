@@ -19,6 +19,19 @@ class InfoDetailRepository(private val userInfoDao: UserInfoDao) : BaseRepositor
         getDetailFromDB(id, callback)
     }
 
+    fun updateState(id: Int, state: Int, callback: () -> Unit) {
+        userInfoDao.updateState(state, id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess {
+                callback()
+            }
+            .doOnError {
+                it.printStackTrace()
+            }
+            .subscribe()
+    }
+
     private fun getDetailFromDB(id: Int, callback: (UserBean) -> Unit) {
         userInfoDao.getUserInfo(id)
             .subscribeOn(Schedulers.io())

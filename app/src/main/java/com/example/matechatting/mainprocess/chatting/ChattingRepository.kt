@@ -6,11 +6,16 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.matechatting.bean.ChattingBean
 import com.example.matechatting.database.ChattingDao
+import com.example.matechatting.database.HasMessageDao
 import com.example.matechatting.database.UserInfoDao
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class ChattingRepository(private val chattingDao: ChattingDao, private val userInfoDao: UserInfoDao) {
+class ChattingRepository(
+    private val chattingDao: ChattingDao,
+    private val userInfoDao: UserInfoDao,
+    private val hasMessageDao: HasMessageDao
+) {
     fun getChattingFromDBPaging(otherId: Int, userId: Int, callback: (LiveData<PagedList<ChattingBean>>) -> Unit) {
         val detailList = LivePagedListBuilder(
             chattingDao.getChattingBeanByIdPaging(otherId, userId), PagedList
@@ -40,13 +45,18 @@ class ChattingRepository(private val chattingDao: ChattingDao, private val userI
             }, {})
     }
 
-    fun changeState(state: Int, otherId: Int, callback: () -> Unit) {
-        userInfoDao.updateStateById(state, otherId)
+    fun changeState(userId: Int, otherId: Int, callback: () -> Unit) {
+        hasMessageDao.deleteHasMessage(userId, otherId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .doOnSuccess {
+                Log.d("aaa","changeState 删除成功")
                 callback()
-            }, {})
+            }
+            .doOnError {
+                Log.d("aaa","changeState 删除错误")
+            }
+            .subscribe()
     }
 
     companion object {
@@ -56,10 +66,10 @@ class ChattingRepository(private val chattingDao: ChattingDao, private val userI
         @Volatile
         private var instance: ChattingRepository? = null
 
-        fun getInstance(chattingDao: ChattingDao,userInfoDao: UserInfoDao) =
+        fun getInstance(chattingDao: ChattingDao, userInfoDao: UserInfoDao, hasMessageDao: HasMessageDao) =
             instance ?: synchronized(this) {
                 instance
-                    ?: ChattingRepository(chattingDao,userInfoDao).also { instance = it }
+                    ?: ChattingRepository(chattingDao, userInfoDao, hasMessageDao).also { instance = it }
             }
     }
 }

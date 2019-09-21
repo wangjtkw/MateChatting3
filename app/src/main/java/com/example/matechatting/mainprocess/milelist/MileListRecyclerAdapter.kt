@@ -53,17 +53,26 @@ class MileListRecyclerAdapter(
 
     fun freshNewFriends(list: List<UserBean>) {
         newFriendArray.clear()
+        if (list.isEmpty()){
+            return
+        }
         list[0].first = true
         newFriendArray.addAll(list)
     }
 
     fun freshNewChattings(list: List<UserBean>) {
         newChattingArray.clear()
+        if (list.isEmpty()){
+            return
+        }
         list[0].first = true
         newChattingArray.addAll(list)
     }
 
     fun frashFriends(list: List<UserBean>) {
+        if (list.isEmpty()){
+            return
+        }
         friendArray.clear()
         friendArray.addAll(setIsFirst(list))
     }

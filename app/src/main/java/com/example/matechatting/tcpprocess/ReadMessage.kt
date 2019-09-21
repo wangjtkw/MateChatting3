@@ -9,10 +9,12 @@ import com.example.matechatting.bean.UserBean
 import com.example.matechatting.tcpprocess.beans.Constant.*
 import com.example.matechatting.tcpprocess.beans.PostCardMessage
 import com.example.matechatting.tcpprocess.repository.TCPRepository
+import com.example.matechatting.tcpprocess.repository.TCPRepository.changeHasMessage
 import com.example.matechatting.tcpprocess.repository.TCPRepository.getAllFriendFromDB
 import com.example.matechatting.tcpprocess.repository.TCPRepository.getAllFriendFromNet
 import com.example.matechatting.tcpprocess.repository.TCPRepository.getAllIdFromDB
 import com.example.matechatting.tcpprocess.repository.TCPRepository.updateOnLineState
+import com.example.matechatting.tcpprocess.repository.TCPRepository.updateOnLineStateList
 import com.example.matechatting.tcpprocess.repository.TCPRepository.updateState
 import com.example.matechatting.tcpprocess.utils.MessageFactory
 import com.google.gson.Gson
@@ -123,29 +125,25 @@ object ReadMessage {
             array.add(a)
         }
         Log.d("aaa", "在线好友 $array")
-        getAllFriendFromDB {db->
+        getAllFriendFromDB { db ->
             getAllFriendFromNet {
-                for (bean:UserBean in db){
-                    Log.d("aaa","state ${bean.state}")
-                    updateState(bean.state,bean.id)
+                for (bean: UserBean in db) {
+                    Log.d("aaa", "state ${bean.state}")
+                    updateState(bean.state, bean.id)
                 }
-                for (id: Int in array) {
-                    updateOnLineState(true, id)
-                }
-                getAllIdFromDB {
-                    val idArray = ArrayList(it)
-                    idArray.removeAll(array)
-                    for (id: Int in idArray) {
-                        updateOnLineState(false, id)
+                updateOnLineStateList(true, array){
+                    getAllIdFromDB {
+                        val idArray = ArrayList(it)
+                        idArray.removeAll(array)
+                        updateOnLineStateList(false,idArray){
+                            val intent = Intent(ON_LINE_FRIEND)
+                            intent.putExtra("subject", HAS_NEW_FRIEND)
+                            context.sendBroadcast(intent)
+                        }
                     }
                 }
-                val intent = Intent(ON_LINE_FRIEND)
-                intent.putExtra("subject", HAS_NEW_FRIEND)
-                context.sendBroadcast(intent)
             }
         }
-
-
     }
 
     private fun logIn(message: PostCardMessage.Message, context: Context) {
@@ -191,7 +189,6 @@ object ReadMessage {
                             context.sendBroadcast(intent)
                         }
                     }
-
                 }
             }
         }
@@ -222,7 +219,7 @@ object ReadMessage {
             )
         }
         TCPRepository.saveMessage(bean) {
-            TCPRepository.changeUserState(3, bean.otherId) {
+            changeHasMessage(bean.userId, bean.otherId) {
                 NettyClient.channel?.writeAndFlush(MessageFactory.success(uuid))
                 val intent = Intent(HAS_NEW_MESSAGE_ACTION)
                 intent.putExtra("subject", bean)
