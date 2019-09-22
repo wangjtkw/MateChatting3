@@ -4,6 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.util.Log
+import android.widget.Toast
+import com.example.matechatting.tcpprocess.service.NetService
+import com.example.matechatting.utils.NetworkState
+import com.example.matechatting.utils.ToastUtil
+import com.example.matechatting.utils.isNetworkConnected
 
 class NetworkConnectChangeReceiver : BroadcastReceiver() {
 
@@ -13,13 +19,11 @@ class NetworkConnectChangeReceiver : BroadcastReceiver() {
         if (context == null || intent == null) {
             return
         }
-        if (intent.action === ConnectivityManager.CONNECTIVITY_ACTION) {
-//            when (isNetworkConnected(context)) {
-//                NetworkState.MOBILE -> setToast("移动网络已连接", context)
-//                NetworkState.WIFI -> setToast("WIFI网络已连接", context)
-//                else -> setToast("网络连接已断开", context)
-//            }
-        }
+//        Toast.makeText(context, "网络变化", Toast.LENGTH_SHORT).show()
+//        if (isNetworkConnected(context) != NetworkState.NONE) {
+//            val serviceIntent = Intent(context, NetService::class.java)
+//            context.startService(serviceIntent)
+//        }
     }
 
 }

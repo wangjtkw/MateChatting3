@@ -23,9 +23,9 @@ import com.google.gson.JsonParser
 import java.sql.Timestamp
 
 object ReadMessage {
-
+    private val TAG = ReadMessage::class.java.name
     fun readMessage(message: PostCardMessage.Message, context: Context) {
-        Log.d("aaa", "message ${message.subject}")
+        Log.d(TAG, "message ${message.subject}")
         when (message.subject) {
             //更新数据集合
             //当前在线好友集合
@@ -34,6 +34,7 @@ object ReadMessage {
             }
             //别人请求添加好友
             ADD_FRIEND_REQUEST -> {
+                Log.d(TAG, "加好友请求")
                 addFriendRequest(message, context)
             }
             //收到别人发的消息
@@ -64,7 +65,7 @@ object ReadMessage {
 
     private fun error(message: PostCardMessage.Message, context: Context) {
         val error = message.payload.toStringUtf8()
-        Log.d("aaa", error.toString())
+        Log.d(TAG, "error $error")
         when (error) {
             //Toast系列
             //加好友请求已发送过
@@ -84,7 +85,6 @@ object ReadMessage {
                 acceptUserHasSendAddRequest(message, context)
             }
         }
-        Log.d("aaa", "error $error")
     }
 
     /**
@@ -125,7 +125,7 @@ object ReadMessage {
             array.add(a)
         }
         Log.d("aaa", "在线好友 $array")
-        getAllFriendFromDB { db ->
+        getAllFriendFromDB(context) { db ->
             getAllFriendFromNet {
                 for (bean: UserBean in db) {
                     Log.d("aaa", "state ${bean.state}")
@@ -218,6 +218,7 @@ object ReadMessage {
                 false
             )
         }
+        Log.d(TAG,"stringMessage 调用")
         TCPRepository.saveMessage(bean) {
             changeHasMessage(bean.userId, bean.otherId) {
                 NettyClient.channel?.writeAndFlush(MessageFactory.success(uuid))
@@ -231,6 +232,5 @@ object ReadMessage {
     private fun success(message: PostCardMessage.Message, context: Context) {
 
     }
-
 
 }

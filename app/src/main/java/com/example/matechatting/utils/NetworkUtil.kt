@@ -3,7 +3,16 @@ package com.example.matechatting.utils
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.NetworkInfo
+import android.net.wifi.WifiInfo
+import android.net.wifi.WifiManager
+import android.net.wifi.aware.WifiAwareManager
 import android.os.Build
+import android.util.Log
+import androidx.core.content.ContextCompat.getSystemService
+import java.io.IOException
+import java.net.MalformedURLException
+import java.net.URL
 
 
 fun isNetworkConnected(context: Context): Int {
@@ -12,7 +21,14 @@ fun isNetworkConnected(context: Context): Int {
         val network = connectivityManager.activeNetwork
         val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return NetworkState.NONE
         return when {
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> NetworkState.WIFI
+            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                val isAvailable = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                if (isAvailable) {
+                    NetworkState.WIFI
+                } else {
+                    NetworkState.NONE
+                }
+            }
             networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                     networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
             -> NetworkState.MOBILE

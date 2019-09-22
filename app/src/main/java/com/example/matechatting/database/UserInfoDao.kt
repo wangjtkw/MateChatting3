@@ -2,6 +2,8 @@ package com.example.matechatting.database
 
 import androidx.room.*
 import com.example.matechatting.bean.UserBean
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 
 @Dao

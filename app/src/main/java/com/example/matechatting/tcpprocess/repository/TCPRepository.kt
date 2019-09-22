@@ -1,6 +1,8 @@
 package com.example.matechatting.tcpprocess.repository
 
+import android.content.Context
 import android.util.Log
+import androidx.annotation.MainThread
 import com.bumptech.glide.Glide
 import com.example.matechatting.BASE_URL
 import com.example.matechatting.MORE_BASE
@@ -19,8 +21,12 @@ import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.utils.ExecuteObserver
 import com.example.matechatting.utils.PinyinUtil
 import com.example.matechatting.utils.runOnNewThread
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 object TCPRepository {
 
@@ -41,22 +47,29 @@ object TCPRepository {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 callback(true)
+                Log.d(TAG, "getUserInfo 调用")
             }, {
                 callback(false)
             })
     }
 
     fun getAndSaveFriendInfo(state: Int, id: Int, callback: (UserBean) -> Unit) {
+        Log.d(TAG, "getAndSaveFriendInfo 调用")
         IdeaApi.getApiService(GetUserByIdService::class.java).getUser(id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(ExecuteObserver(onExecuteNext = {
+                Log.d(TAG, "getAndSaveFriendInfo 调用")
                 setUserBeanInfo(it, state, "", callback)
+            }, onExecuteError = {
+                Log.d(TAG, "getAndSaveFriendInfo 错误")
+                it.printStackTrace()
             }))
     }
 
     fun changeHasMessage(userId: Int, otherId: Int, callback: () -> Unit = {}) {
-        val hasMessageBean = HasMessageBean(otherId,userId,true)
+        Log.d(TAG, "changeHasMessage 调用")
+        val hasMessageBean = HasMessageBean(otherId, userId, true)
         AppDatabase.getInstance(MyApplication.getContext()).hasMessageDao().insertUserInfo(hasMessageBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -80,6 +93,7 @@ object TCPRepository {
     }
 
     private fun setUserBeanInfo(userBean: UserBean, state: Int, token: String = "", callback: (UserBean) -> Unit = {}) {
+        Log.d("AAA", "setUserBeanInfo 调用")
         //设置UserBean的类型
         var saveTemp = setState(userBean, state)
         //提取UserBean姓名的首字母
@@ -105,6 +119,7 @@ object TCPRepository {
     }
 
     fun saveInDB(userBean: UserBean) {
+        Log.d(TAG, "saveInDB 调用")
         AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().insertUserInfo(userBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -146,27 +161,14 @@ object TCPRepository {
     }
 
     fun getAllFriendFromNet(callback: () -> Unit) {
+        Log.d("TAG","hello")
         IdeaApi.getApiService(GetAllFriendService::class.java).getAllFriend()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(ExecuteObserver(onExecuteNext = {
-                Log.d(TAG, "getAllFriendFromNet 从服务器获取的所有好友信息 -> $it")
-                for ((i, bean: UserBean) in it.withIndex()) {
-                    //怕服务器返回null，所以加的判断
-                    Log.d(TAG, "getAllFriendFromNet $i + ${it.size}")
-                    if (bean != null) {
-                        setUserBeanInfo(bean, 4) { user ->
-                            if (i == it.size - 1) {
-                                Log.d(TAG, "getAllFriendFromNet 加载好友完毕")
-                                callback()
-                            }
-                        }
-                    }
-                }
-//                callback()
-            }, onExecuteError = {
-                it.printStackTrace()
-            }))
+            .subscribe({
+                it.forEach { setUserBeanInfo(it, 4) } },
+                { it.printStackTrace()},
+                { callback()})
     }
 
     private fun setFirstPinYin(result: UserBean): UserBean {
@@ -208,12 +210,22 @@ object TCPRepository {
     }
 
     fun saveMessage(chattingBean: ChattingBean, callback: () -> Unit) {
-        AppDatabase.getInstance(MyApplication.getContext()).chattingDao().insertChattingBean(chattingBean)
+        Log.d(TAG, "saveMessage 调用")
+        Log.d(TAG, "saveMessage $chattingBean")
+        Log.d(TAG, "saveMessage ${MyApplication.getContext()}")
+        val dao = AppDatabase.getInstance(MyApplication.getContext()).chattingDao()
+        Log.d(TAG, "saveMessage $dao")
+        dao.insertChattingBean(chattingBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
+            .doOnSuccess {
+                Log.d(TAG, "saveMessage 调用完成")
                 callback()
-            }, {})
+            }
+            .doOnError {
+                Log.d(TAG, "saveMessage 调用错误")
+            }
+            .subscribe()
     }
 
     fun updateOnLineState(state: Boolean, id: Int, callback: () -> Unit = {}) {
@@ -253,13 +265,16 @@ object TCPRepository {
             }, {})
     }
 
-    fun getAllFriendFromDB(callback: (List<UserBean>) -> Unit) {
-        AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().getAllFriend()
+    fun getAllFriendFromDB(context: Context, callback: (List<UserBean>) -> Unit) {
+        Log.d(TAG, "Thread.currentThread().id ${Thread.currentThread().id}")
+        AppDatabase.getInstance(context).userInfoDao().getAllFriend()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess(callback)
+            .doOnSuccess {
+                callback(it)
+            }
             .doOnError {
-
+                Log.d(TAG, "getAllFriendFromDB 错误")
             }
             .subscribe()
     }
@@ -267,7 +282,7 @@ object TCPRepository {
     fun updateState(state: Int, id: Int, callback: () -> Unit = {}) {
         AppDatabase.getInstance(MyApplication.getContext()).userInfoDao().updateState(state, id)
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(Schedulers.io())
             .doOnSuccess {
                 callback()
             }

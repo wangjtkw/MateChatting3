@@ -219,7 +219,7 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
      * @param callback:同步完成后调用
      */
     fun getFriends(callback: () -> Unit) {
-        Log.d(TAG,"getFriend 调用")
+        Log.d(TAG, "getFriend 调用")
         getFriendsInfo(callback)
     }
 
@@ -292,7 +292,7 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
         IdeaApi.getApiService(GetAllFriendService::class.java).getAllFriend()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(ExecuteObserver(onExecuteNext = {
+            .doOnNext {
                 Log.d(TAG, "getAllFriendFromNet 从服务器获取的所有好友信息 -> $it")
                 for ((i, bean: UserBean) in it.withIndex()) {
                     //怕服务器返回null，所以加的判断
@@ -306,10 +306,11 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
                         }
                     }
                 }
-//                callback()
-            },onExecuteError = {
+            }
+            .doOnError {
                 it.printStackTrace()
-            }))
+            }
+            .subscribe()
     }
 
     /**

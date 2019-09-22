@@ -272,6 +272,7 @@ class MileListFragment : BaseFragment() {
         receiver = object : BroadcastReceiver() {
             override fun onReceive(p0: Context?, p1: Intent?) {
                 initData()
+                Log.d("aaa","收到广播")
 //                when (p1?.getStringExtra("subject") ?: "") {
 //                    HAS_NEW_FRIEND -> {
 //

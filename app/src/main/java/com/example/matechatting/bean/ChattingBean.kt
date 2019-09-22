@@ -18,8 +18,10 @@ data class ChattingBean(
     //是否是文字消息
     var isString: Boolean = true,
     //发送消息的时间戳
-    @PrimaryKey
     var time: String = "",
     //是否是发送的消息，区分消息左右
     var isUserSend: Boolean = true
-) : Serializable
+) : Serializable{
+    @PrimaryKey(autoGenerate = true)
+    var key:Int = 0
+}

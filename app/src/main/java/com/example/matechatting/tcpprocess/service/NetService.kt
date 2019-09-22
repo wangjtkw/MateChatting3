@@ -1,30 +1,61 @@
 package com.example.matechatting.tcpprocess.service
 
 import android.app.Service
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
+import android.os.Build
 import android.os.IBinder
 import android.os.RemoteCallbackList
 import android.util.Log
-import com.example.matechatting.*
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.example.matechatting.ACCEPT_FRIEND_ACTION
+import com.example.matechatting.AcceptFriendListener
+import com.example.matechatting.TCPInterface
 import com.example.matechatting.tcpprocess.NettyClient
 import com.example.matechatting.tcpprocess.repository.TCPRepository
 import com.example.matechatting.tcpprocess.utils.MessageFactory
 import com.example.matechatting.utils.InjectorUtils
+import com.example.matechatting.utils.NetworkState
+import com.example.matechatting.utils.isNetworkConnected
 import com.example.matechatting.utils.runOnNewThread
+import io.reactivex.Flowable
+import org.intellij.lang.annotations.Flow
 
 class NetService : Service() {
+    private var networkReceiver: NetworkReceiver? = null
+    private var myNetworkCallback: MyNetworkCallback? = null
     private val remoteAcceptCallbackList = RemoteCallbackList<AcceptFriendListener>()
 
     override fun onCreate() {
         super.onCreate()
-        InjectorUtils.getAccountRepository(this).getToken {
-            if (it.isNotEmpty()) {
-                runOnNewThread {
-                    NettyClient(HOST, PORT, this).start(it)
-                }
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            myNetworkCallback = MyNetworkCallback()
+//            val networkRequest = NetworkRequest.Builder().build()
+//            val connectManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//            connectManager.registerNetworkCallback(networkRequest, myNetworkCallback!!)
+//        } else {
+//            networkReceiver = NetworkReceiver()
+//            val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+//            LocalBroadcastManager.getInstance(this).registerReceiver(networkReceiver!!, filter)
+//        }
     }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        connect()
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    private fun connect() {
+        Log.d(TAG,"connect 调用")
+        NettyClient.getInstance().connect(this)
+    }
+
 
     override fun onBind(intent: Intent): IBinder {
         netBinder = NetBinder()
@@ -35,6 +66,15 @@ class NetService : Service() {
         super.onDestroy()
         if (netBinder != null) {
             netBinder = null
+        }
+        if (networkReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(networkReceiver!!)
+            networkReceiver = null
+        }
+        if (myNetworkCallback != null) {
+            val connectManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            connectManager.unregisterNetworkCallback(myNetworkCallback!!)
+            myNetworkCallback = null
         }
     }
 
@@ -85,7 +125,37 @@ class NetService : Service() {
         }
     }
 
+    inner class NetworkReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (isNetworkConnected(context) != NetworkState.NONE && !NettyClient.getInstance().isConnect) {
+                connect()
+                Log.e(TAG, "connecting ...")
+            }
+        }
+    }
+
+    inner class MyNetworkCallback : ConnectivityManager.NetworkCallback() {
+
+        override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+            super.onCapabilitiesChanged(network, networkCapabilities)
+            if (isNetworkConnected(this@NetService) != NetworkState.NONE && !NettyClient.getInstance().isConnect) {
+                connect()
+            }
+        }
+
+        override fun onLost(network: Network) {
+            super.onLost(network)
+            Log.d(TAG, "网络已断开")
+        }
+
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            Log.d(TAG, "网络已连接")
+        }
+    }
+
     companion object {
+        private val TAG = NetService::class.java.name
         var netBinder: NetBinder? = null
     }
 

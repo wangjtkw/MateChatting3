@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
 import androidx.multidex.MultiDexApplication
+import com.squareup.leakcanary.LeakCanary
 import com.squareup.leakcanary.RefWatcher
 import io.reactivex.plugins.RxJavaPlugins
 
@@ -12,15 +13,17 @@ class MyApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-//        if (LeakCanary.isInAnalyzerProcess(this)) {
-//            return
-//        }
+        context = applicationContext
+
         RxJavaPlugins.setErrorHandler {
             val message = it.message ?: ""
             Log.d("aaa", message)
         }
-//        sRefWatcher = LeakCanary.install(this)
-        context = applicationContext
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            return
+        }
+        sRefWatcher = LeakCanary.install(this)
+
     }
 
     companion object {

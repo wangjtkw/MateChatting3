@@ -8,7 +8,7 @@ import okhttp3.Response
 class TokenInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = MyApplication.getToken()
-        Log.d("aaa","token $token")
+        Log.d("AAA","token $token")
         return if (token.isNullOrEmpty()) {
             val originalRequest = chain.request()
             chain.proceed(originalRequest)
