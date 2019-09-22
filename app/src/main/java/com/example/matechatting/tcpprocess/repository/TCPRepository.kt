@@ -273,6 +273,7 @@ object TCPRepository {
             .doOnSuccess {
                 callback(it)
             }
+
             .doOnError {
                 Log.d(TAG, "getAllFriendFromDB 错误")
             }
