@@ -15,7 +15,6 @@ import com.example.matechatting.mainprocess.login.LoginState.Companion.ERROR
 import com.example.matechatting.mainprocess.login.LoginState.Companion.FIRST
 import com.example.matechatting.mainprocess.login.LoginState.Companion.NOT_FIRST
 import com.example.matechatting.mainprocess.login.LoginState.Companion.NO_NETWORK
-import com.example.matechatting.mainprocess.repository.UserBeanRepository
 import com.example.matechatting.network.*
 import com.example.matechatting.utils.ExecuteObserver
 import com.example.matechatting.utils.PinyinUtil
@@ -23,7 +22,8 @@ import com.example.matechatting.utils.runOnNewThread
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class LoginRepository(private val accountDao: AccountDao, private val userInfoDao: UserInfoDao) : BaseRepository {
+class LoginRepository(private val accountDao: AccountDao, private val userInfoDao: UserInfoDao) :
+    BaseRepository {
 
     fun getUserBeanFromNet(token: String = "", callback: (UserBean) -> Unit = {}) {
         val service: GetMyInfoService = if (token.isEmpty()) {
@@ -46,7 +46,12 @@ class LoginRepository(private val accountDao: AccountDao, private val userInfoDa
      * @param state:0(陌生人)，1（自己），2（新好友），3（聊天好友），4（好友）
      * @param userBean:网络请求得到的数据类
      */
-    private fun setUserBeanInfo(userBean: UserBean, state: Int, token: String = "", callback: (UserBean) -> Unit = {}) {
+    private fun setUserBeanInfo(
+        userBean: UserBean,
+        state: Int,
+        token: String = "",
+        callback: (UserBean) -> Unit = {}
+    ) {
         //设置UserBean的类型
         var saveTemp = setState(userBean, state)
         //提取UserBean姓名的首字母
@@ -54,19 +59,19 @@ class LoginRepository(private val accountDao: AccountDao, private val userInfoDa
         //设置UserBean的方向及入学年
         saveTemp = setInfo(saveTemp)
         //如果有头像信息，则缓存入本地，并返回缓存路径
-        if (!saveTemp.headImage.isNullOrEmpty()) {
-            saveHeadImagePath(saveTemp) {
-                if (token.isEmpty()) {
-                    saveInDB(it)
-                }
-                callback(it)
-            }
-        } else {
-            if (token.isEmpty()) {
-                saveInDB(saveTemp)
-            }
-            callback(saveTemp)
+//        if (!saveTemp.headImage.isNullOrEmpty()) {
+//            saveHeadImagePath(saveTemp) {
+//                if (token.isEmpty()) {
+//                    saveInDB(it)
+//                }
+//                callback(it)
+//            }
+//        } else {
+        if (token.isEmpty()) {
+            saveInDB(saveTemp)
         }
+        callback(saveTemp)
+//        }
     }
 
     /**
@@ -103,6 +108,15 @@ class LoginRepository(private val accountDao: AccountDao, private val userInfoDa
             }
             result.direction = sb.toString().trim()
         }
+        if (!result.responseAwards.isNullOrEmpty()) {
+            val sb = java.lang.StringBuilder()
+            for (s: String in result.responseAwards!!) {
+                sb.append(" ")
+                sb.append(s)
+            }
+            result.award = sb.toString()
+        }
+
         val sb = StringBuilder()
         sb.append(result.graduationYear)
         sb.append("年入学")
@@ -165,7 +179,11 @@ class LoginRepository(private val accountDao: AccountDao, private val userInfoDa
     }
 
 
-    fun checkFromDatabase(account: String, password: String, callback: (state: Int, List<String>) -> Unit) {
+    fun checkFromDatabase(
+        account: String,
+        password: String,
+        callback: (state: Int, List<String>) -> Unit
+    ) {
         accountDao.checkAccount(account)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -186,7 +204,8 @@ class LoginRepository(private val accountDao: AccountDao, private val userInfoDa
         password: String,
         callback: (state: Int, List<String>) -> Unit
     ) {
-        IdeaApi.getApiService(LoginService::class.java, false).getLoginAndGetToken(account, password)
+        IdeaApi.getApiService(LoginService::class.java, false)
+            .getLoginAndGetToken(account, password)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -210,7 +229,13 @@ class LoginRepository(private val accountDao: AccountDao, private val userInfoDa
         MyApplication.saveLoginState(account, token, id, inSchool)
     }
 
-    private fun saveInDB(account: String, password: String, token: String, id: Int, inSchool: Boolean) {
+    private fun saveInDB(
+        account: String,
+        password: String,
+        token: String,
+        id: Int,
+        inSchool: Boolean
+    ) {
         val accountBean = AccountBean(account, password, token, true, id, inSchool)
         accountDao.insertAccount(accountBean)
             .subscribeOn(Schedulers.io())
@@ -222,6 +247,7 @@ class LoginRepository(private val accountDao: AccountDao, private val userInfoDa
 
     companion object {
         private const val TAG = "LoginRepository"
+
         @Volatile
         private var instance: LoginRepository? = null
 
@@ -238,12 +264,16 @@ class LoginState {
     companion object {
         //输入账号为空
         const val ACCOUNT_NULL = 1
+
         //输入密码为空
         const val PASSWORD_NULL = 2
+
         //账号或密码错误
         const val ERROR = 3
+
         //请连接网络
         const val NO_NETWORK = 4
+
         //下两个都为验证成功
         const val FIRST = 5
         const val NOT_FIRST = 6

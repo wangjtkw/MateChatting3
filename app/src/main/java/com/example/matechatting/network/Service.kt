@@ -81,7 +81,7 @@ interface PostImageService {
      */
     @Multipart
     @POST("/postcard/app/user/upload_profile_photo")
-    fun postImage(@Part file: MultipartBody.Part): Observable<SBean>
+    fun postImage(@Part file: MultipartBody.Part): Observable<SPBean>
 }
 
 interface GetHomeItemService {
@@ -106,6 +106,8 @@ interface GetUserByIdService {
     @POST("/postcard/app/user/get_user_by_id")
     fun getUser(@Field("id") id: Int): Observable<UserBean>
 }
+
+
 
 interface GetMineService {
     @POST("/postcard/app/user/get_user_by_token")

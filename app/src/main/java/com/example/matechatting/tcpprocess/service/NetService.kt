@@ -32,6 +32,8 @@ class NetService : Service() {
     private var myNetworkCallback: MyNetworkCallback? = null
     private val remoteAcceptCallbackList = RemoteCallbackList<AcceptFriendListener>()
 
+    private val TAG = "NetService"
+
     override fun onCreate() {
         super.onCreate()
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -47,6 +49,7 @@ class NetService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d(TAG,"service 调用")
         connect()
         return super.onStartCommand(intent, flags, startId)
     }
@@ -155,7 +158,6 @@ class NetService : Service() {
     }
 
     companion object {
-        private val TAG = NetService::class.java.name
         var netBinder: NetBinder? = null
     }
 

@@ -20,6 +20,7 @@ class HomeSearchResultHolder(private val binding: ItemSearchResultBinding) : Bas
                 itemSearchName.text = searchBean.name
                 itemSearchGraduate.text = searchBean.graduation
                 itemSearchMajor.text = searchBean.direction
+                Log.d("direction","direction: ${searchBean.direction}")
                 itemSearchCompany.text = searchBean.company
                 if (!searchBean.headImage.isNullOrEmpty()) {
                     val sb = StringBuilder()

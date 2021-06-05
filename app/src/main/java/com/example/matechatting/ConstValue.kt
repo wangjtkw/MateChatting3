@@ -15,11 +15,11 @@ const val FORGET_REQUEST_CODE = 0x132
 //第一次登陆从我的信息页返回登录页请求码
 const val FIRST_MY_INFO_REQUEST_CODE = 0x133
 
-const val BASE_URL = "http://39.100.233.149:8081"
+const val BASE_URL = "http://1.116.100.239:80"
 const val MORE_BASE = "/postcard"
 const val PATH = "/static/"
-const val HOST = "39.100.233.149"
-const val PORT = 8159
+const val HOST = "1.116.100.239"
+const val PORT = 8083
 var PAGE = ArrayList<Int>()
 /**
  * 广播

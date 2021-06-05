@@ -56,6 +56,7 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : ViewModel() {
             myInfoEmile.set(email)
             myInfoCity.set(city)
             myInfoSlogan.set(slogan)
+            myInfoHeadImage.set(headImage)
 //            if (!headImage.isNullOrEmpty()) {
 //                myInfoHeadImage.set(headImage)
 //                myInfoHeadImage.notifyChange()

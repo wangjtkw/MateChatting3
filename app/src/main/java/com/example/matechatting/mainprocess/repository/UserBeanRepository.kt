@@ -2,6 +2,7 @@ package com.example.matechatting.mainprocess.repository
 
 import android.util.Log
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target.SIZE_ORIGINAL
 import com.example.matechatting.BASE_URL
 import com.example.matechatting.MORE_BASE
 import com.example.matechatting.MyApplication
@@ -73,7 +74,13 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
      * @param state:0(陌生人)，1（自己），2（新好友），3（聊天好友），4（好友）
      * @param userBean:网络请求得到的数据类
      */
-    private fun setUserBeanInfo(userBean: UserBean, state: Int, token: String = "", callback: (UserBean) -> Unit = {}) {
+    private fun setUserBeanInfo(
+        userBean: UserBean,
+        state: Int,
+        token: String = "",
+        callback: (UserBean) -> Unit = {}
+    ) {
+        Log.d(TAG, "token:$token")
         //设置UserBean的类型
         var saveTemp = setState(userBean, state)
         //提取UserBean姓名的首字母
@@ -81,19 +88,19 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
         //设置UserBean的方向及入学年
         saveTemp = setInfo(saveTemp)
         //如果有头像信息，则缓存入本地，并返回缓存路径
-        if (!saveTemp.headImage.isNullOrEmpty()) {
-            saveHeadImagePath(saveTemp) {
-                if (token.isEmpty()) {
-                    saveInDB(it)
-                }
-                callback(it)
-            }
-        } else {
+//        if (!saveTemp.headImage.isNullOrEmpty()) {
+//            saveHeadImagePath(saveTemp) {
+//                if (token.isEmpty()) {
+//                    saveInDB(it)
+//                }
+//                callback(it)
+//            }
+//        } else {
             if (token.isEmpty()) {
                 saveInDB(saveTemp)
             }
             callback(saveTemp)
-        }
+//        }
     }
 
     /**
@@ -101,6 +108,7 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
      * @param userBean:基本信息完全的数据类
      */
     private fun saveInDB(userBean: UserBean) {
+        Log.d(TAG, "saveInDB run")
         userInfoDao.insertUserInfo(userBean)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -130,6 +138,14 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
             }
             result.direction = sb.toString().trim()
         }
+        result.responseAwards?.apply {
+            val sb = StringBuilder()
+            for (s: String in this) {
+                sb.append(" ")
+                sb.append(s)
+            }
+            result.award = sb.toString().trim()
+        }
         val sb = StringBuilder()
         sb.append(result.graduationYear)
         sb.append("年入学")
@@ -147,6 +163,7 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
      * @param callback:将更改了头像路径的UserBean返回
      */
     private fun saveHeadImagePath(result: UserBean, callback: (UserBean) -> Unit) {
+        Log.d(TAG, "saveHeadImagePath run")
         if (result.headImage.isNullOrEmpty()) {
             return
         }
@@ -159,16 +176,17 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
             .append(MORE_BASE)
             .append(PATH)
             .append(result.headImage)
-        runOnNewThread {
-            val target = Glide.with(MyApplication.getContext())
-                .asFile()
-                .load(sb.toString())
-                .submit()
-            val cachePath = target.get().absolutePath
-            Log.d(TAG, "saveHeadImagePath 头像缓存路径 -> $cachePath")
-            result.headImage = cachePath
-            callback(result)
-        }
+        Log.d(TAG, "imgUrl:$sb")
+//        runOnNewThread {
+        val target = Glide.with(MyApplication.getContext())
+            .downloadOnly()
+            .load(sb.toString())
+            .submit()
+        val cachePath = target.get().absolutePath
+        Log.d(TAG, "saveHeadImagePath 头像缓存路径 -> $cachePath")
+        result.headImage = cachePath
+        callback(result)
+//        }
     }
 
     /**
@@ -294,10 +312,12 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
                 Log.d(TAG, "getAllFriendFromNet 从服务器获取的所有好友信息 -> $it")
-                for ((i, bean: UserBean) in it.withIndex()) {
-                    //怕服务器返回null，所以加的判断
-                    Log.d(TAG, "getAllFriendFromNet $i + ${it.size}")
-                    if (bean != null) {
+                if (it.isEmpty()) {
+                    callback()
+                } else {
+                    for ((i, bean: UserBean) in it.withIndex()) {
+                        //怕服务器返回null，所以加的判断
+                        Log.d(TAG, "getAllFriendFromNet $i + ${it.size}")
                         setUserBeanInfo(bean, 4) { user ->
                             if (i == it.size - 1) {
                                 Log.d(TAG, "getAllFriendFromNet 加载好友完毕")
@@ -306,6 +326,7 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
                         }
                     }
                 }
+
             }
             .doOnError {
                 it.printStackTrace()
@@ -367,7 +388,11 @@ class UserBeanRepository(private val userInfoDao: UserInfoDao) {
         val service: UpdateUserInfoService = if (token.isEmpty()) {
             IdeaApi.getApiService(UpdateUserInfoService::class.java)
         } else {
-            IdeaApi.getApiService(UpdateUserInfoService::class.java, false, OtherTokenInterceptor(token))
+            IdeaApi.getApiService(
+                UpdateUserInfoService::class.java,
+                false,
+                OtherTokenInterceptor(token)
+            )
         }
         service.update(userBeanToPostUserBean(userBean))
             .subscribeOn(Schedulers.io())

@@ -23,6 +23,8 @@ class InfoDetailViewModel(private val repository: UserBeanRepository) : ViewMode
     val detailEmile = ObservableField("未填写")
     val detailCity = ObservableField("未填写")
     val detailSlogan = ObservableField("未填写")
+    val detailAward = ObservableField("未填写")
+    val detailHeadImg = ObservableField("")
     val defaltString = "未填写"
     val defaultSlogan = "快乐生活每一天"
 
@@ -61,6 +63,11 @@ class InfoDetailViewModel(private val repository: UserBeanRepository) : ViewMode
                 } else {
                     detailDirection.set(direction)
                 }
+                if (award.isEmpty()){
+                    detailAward.set("无")
+                }else{
+                    detailAward.set(award)
+                }
                 if (qqAccount.toString().isEmpty() || qqAccount == 0L) {
                     detailQQ.set(defaltString)
                 } else {
@@ -86,14 +93,16 @@ class InfoDetailViewModel(private val repository: UserBeanRepository) : ViewMode
                 } else {
                     detailSlogan.set(slogan)
                 }
-                if (!headImage.isNullOrEmpty()) {
-                    setHeadImage(headImageView, headImage!!)
+                if (headImage.isNullOrEmpty()){
+                    detailHeadImg.set("")
+                }else{
+                    detailHeadImg.set(headImage)
                 }
             }
         }
     }
 
-    fun updateState(userBean: UserBean,state:Int,callback: () -> Unit){
+    fun updateState(userBean: UserBean, state: Int, callback: () -> Unit) {
         repository.updateState(userBean, state, callback)
     }
 

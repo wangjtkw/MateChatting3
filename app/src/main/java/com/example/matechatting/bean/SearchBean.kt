@@ -29,6 +29,7 @@ data class SearchBean(
                 var company: String,
                 @SerializedName("directions")
                 var directions: Directions,
+                var awards: Awards,
                 @SerializedName("email")
                 var email: String,
                 @SerializedName("is_man")
@@ -59,11 +60,17 @@ data class SearchBean(
             ) {
                 var direction = ""
                 var graduation = ""
+                var award = ""
 
                 data class Directions(
                     @SerializedName("empty")
                     var empty: Boolean,
                     @SerializedName("myArrayList")
+                    var myArrayList: List<String>
+                )
+
+                data class Awards(
+                    var empty: Boolean,
                     var myArrayList: List<String>
                 )
             }

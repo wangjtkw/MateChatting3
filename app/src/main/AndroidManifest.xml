@@ -1,102 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-		  package="com.example.matechatting">
+	xmlns:tools="http://schemas.android.com/tools"
+	package="com.example.matechatting">
 	<!-- !!读内存权限 -->
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> <!-- 网络状态权限 -->
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 网络状态权限 -->
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 网络状态权限 -->
+	<!--在sdcard中创建/删除文件的权限 -->
+	<uses-permission
+		android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+		tools:ignore="ProtectedPermissions" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 	<application
 		android:name=".MyApplication"
 		android:allowBackup="true"
 		android:icon="@drawable/ic_logo"
 		android:label="@string/app_name"
+		android:requestLegacyExternalStorage="true"
 		android:networkSecurityConfig="@xml/network_security_config"
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity android:name=".mainprocess.album.AlbumListActivity">
-		</activity>
-		<activity android:name=".mainprocess.milelistsearch.MileListSearchActivity">
-		</activity>
+		<activity android:name=".mainprocess.album.AlbumListActivity"/>
+		<activity android:name=".mainprocess.milelistsearch.MileListSearchActivity"/>
 
 		<receiver
 			android:name=".receiver.NetChangeReceiverReceiver"
 			android:enabled="true"
 			android:exported="false">
 			<intent-filter>
-				<action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
 			</intent-filter>
 		</receiver>
 
 		<service
 			android:name=".tcpprocess.service.NetService"
 			android:enabled="true"
-			android:exported="true"
-			android:process="net.test">
-		</service>
+			android:exported="true"></service>
 
 		<activity
 			android:name=".mainprocess.direction.DirectionNewActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.chatting.ChattingActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.homesearch.HomeSearchActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.cliphead.ClipActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.album.AlbumActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.bindphone.BindPhoneActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.forgetpassword.ForgetPasswordActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.changepassword.ChangePasswordActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.login.LoginActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.myinfo.MyinfoActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.myinfo.PersonsignActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.infodetail.InfoDetailActivity"
-			android:screenOrientation="portrait">
-		</activity>
+			android:screenOrientation="portrait"></activity>
 		<activity
 			android:name=".mainprocess.main.MainActivity"
 			android:screenOrientation="portrait">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
+				<action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER"/>
+				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
 	</application>

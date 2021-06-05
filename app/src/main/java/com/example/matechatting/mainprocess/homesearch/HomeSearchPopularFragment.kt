@@ -40,6 +40,6 @@ class HomeSearchPopularFragment : Fragment() {
     }
 
     companion object {
-        private val labelArray = arrayOf("JAVA", "云计算", "IOS", "产品经理", "运维工程师", "Android", "系统分析员", "UI设计")
+        private val labelArray = arrayOf("数学竞赛", "互联网+", "软件设计", "单片机", "软件工程", "计算机")
     }
 }

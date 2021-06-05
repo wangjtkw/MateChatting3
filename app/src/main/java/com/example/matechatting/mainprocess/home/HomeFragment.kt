@@ -93,7 +93,8 @@ class HomeFragment : BaseFragment() {
 
     private fun initSearchButton() {
         homeButton.setOnClickListener {
-            val intent = Intent(requireActivity(), HomeSearchActivity::class.java)
+            val intent = Intent(requireActivity(),
+                HomeSearchActivity::class.java)
             transferActivity(intent, 0x999)
         }
     }

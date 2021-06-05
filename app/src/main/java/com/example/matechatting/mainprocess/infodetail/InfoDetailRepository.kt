@@ -1,14 +1,11 @@
 package com.example.matechatting.mainprocess.infodetail
 
-import com.example.matechatting.MyApplication
 import com.example.matechatting.base.BaseRepository
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.UserInfoDao
 import com.example.matechatting.network.GetUserByIdService
 import com.example.matechatting.network.IdeaApi
-import com.example.matechatting.utils.NetworkState
 import com.example.matechatting.utils.PinyinUtil
-import com.example.matechatting.utils.isNetworkConnected
 import com.example.matechatting.utils.runOnNewThread
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -71,7 +68,14 @@ class InfoDetailRepository(private val userInfoDao: UserInfoDao) : BaseRepositor
                     sb.append(s)
                 }
                 direction = sb.toString()
-                direction = sb.toString()
+            }
+            if (!responseAwards.isNullOrEmpty()) {
+                val sb = java.lang.StringBuilder()
+                for (s: String in responseAwards!!) {
+                    sb.append(" ")
+                    sb.append(s)
+                }
+                award = sb.toString()
             }
             val sb = StringBuilder()
             sb.append(graduationYear)

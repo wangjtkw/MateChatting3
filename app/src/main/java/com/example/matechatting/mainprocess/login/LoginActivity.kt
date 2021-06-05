@@ -26,6 +26,8 @@ import com.example.matechatting.utils.ToastUtilWarning
 import com.example.matechatting.utils.isNetworkConnected
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
+    private val TAG = "LoginActivity"
+
     private lateinit var accountEdit: EditText
     private lateinit var passwordEdit: EditText
     private lateinit var accountError: TextView
@@ -198,12 +200,14 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                 LoginState.PASSWORD_NULL -> passwordError.text = "请输入密码"
                 LoginState.ERROR -> passwordError.text = "账号或密码错误"
                 LoginState.FIRST -> {
+                    Log.d(TAG,"FIRST")
                     val intent = Intent(this, MyinfoActivity::class.java)
                     intent.putExtra("token", list[0])
                     intent.putExtra("inSchool", list[1].toBoolean())
                     startActivityForResult(intent, FIRST_MY_INFO_REQUEST_CODE)
                 }
                 LoginState.NOT_FIRST -> {
+                    Log.d(TAG,"NOT_FIRST")
                     viewModel.getUserInfo {
                         viewModel.getUserFriends {
                             val intent = Intent(this, MainActivity::class.java)

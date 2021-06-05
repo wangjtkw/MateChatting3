@@ -19,9 +19,9 @@ class MyApplication : MultiDexApplication() {
             val message = it.message ?: ""
             Log.d("aaa", message)
         }
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return
-        }
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return
+//        }
         sRefWatcher = LeakCanary.install(this)
 
     }

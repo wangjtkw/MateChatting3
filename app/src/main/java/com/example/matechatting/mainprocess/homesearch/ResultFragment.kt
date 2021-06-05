@@ -26,6 +26,8 @@ import com.example.matechatting.utils.ToastUtilWarning
 import java.util.*
 
 class ResultFragment : BaseFragment() {
+    private val TAG = "ResultFragment"
+
     private lateinit var binding: FragmentResultBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: HomeSearchResultAdapter
@@ -64,8 +66,6 @@ class ResultFragment : BaseFragment() {
             adapter.needGone = true
         }
         adapter.frashData(array)
-        Log.d("aaa", "resultArray.observe + $array")
-
         recyclerView.adapter = adapter
     }
 
@@ -98,7 +98,9 @@ class ResultFragment : BaseFragment() {
         val activity = requireActivity() as HomeSearchActivity
         callbackPersonLayout = {id->
             activity.viewModel.getUserInfo(id){
+                Log.d(TAG,"回调成功")
                 if (it){
+
                     val intent = Intent(requireActivity(), InfoDetailActivity::class.java)
                     intent.putExtra("id", id)
                     intent.putExtra("subject", HOME_ITEM)

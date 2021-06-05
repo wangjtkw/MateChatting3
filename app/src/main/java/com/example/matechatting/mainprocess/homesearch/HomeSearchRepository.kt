@@ -12,14 +12,19 @@ import io.reactivex.schedulers.Schedulers
 
 class HomeSearchRepository : BaseRepository {
 
-    fun getResult(key: String, page: Int, size: Int = 20, callback: (List<SearchBean.Payload.MyArray.Map>) -> Unit) {
+    fun getResult(
+        key: String,
+        page: Int,
+        size: Int = 20,
+        callback: (List<SearchBean.Payload.MyArray.Map>) -> Unit
+    ) {
         IdeaApi.getApiService(SearchService::class.java).getResult(key, page, size)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(ExecuteObserver(onExecuteNext = {
-                Log.d("aaa", "getResult" + it.toString())
+//                Log.d("aaa", "getResult" + it.toString())
                 if (it.success) {
-                    Log.d("aaa", "getResult" + it.toString())
+//                    Log.d("aaa", "getResult" + it.toString())
                     callback(setInfo(it.payload))
                 } else {
                     callback(ArrayList())
@@ -32,22 +37,30 @@ class HomeSearchRepository : BaseRepository {
 
 
     private fun setBeanInfo(userBean: SearchBean.Payload.MyArray.Map) {
-        runOnNewThread {
-            userBean.apply {
-                if (!directions.myArrayList.isNullOrEmpty()) {
-                    val sb = StringBuilder()
-                    for (s: String in directions.myArrayList) {
-                        sb.append(" ")
-                        sb.append(s)
-                    }
-                    direction = sb.toString()
-                }
+
+        userBean.apply {
+            if (!directions.myArrayList.isNullOrEmpty()) {
                 val sb = StringBuilder()
-                sb.append(graduationYear)
-                sb.append("年入学")
-                graduation = sb.toString()
+                for (s: String in directions.myArrayList) {
+                    sb.append(" ")
+                    sb.append(s)
+                }
+                direction = sb.toString()
             }
+            if (!awards.myArrayList.isNullOrEmpty()) {
+                val sb = StringBuilder()
+                for (s: String in awards.myArrayList) {
+                    sb.append(" ")
+                    sb.append(s)
+                }
+                award = sb.toString()
+            }
+            val sb = StringBuilder()
+            sb.append(graduationYear)
+            sb.append("年入学")
+            graduation = sb.toString()
         }
+
 
 //        return userBean
     }

@@ -88,6 +88,14 @@ class MineRepository(private val userInfoDao: UserInfoDao) : BaseRepository {
                 }
                 direction = sb.toString()
             }
+            if (!responseAwards.isNullOrEmpty()) {
+                val sb = java.lang.StringBuilder()
+                for (s: String in responseAwards!!) {
+                    sb.append(" ")
+                    sb.append(s)
+                }
+                award = sb.toString()
+            }
             val sb = StringBuilder()
             sb.append(graduationYear)
             sb.append("年入学")

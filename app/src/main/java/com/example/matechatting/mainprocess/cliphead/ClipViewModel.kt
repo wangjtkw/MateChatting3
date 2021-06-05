@@ -11,9 +11,10 @@ class ClipViewModel(private val repository: ClipRepository) : ViewModel() {
     fun postImage(file: File, token: String, callback: () -> Unit) {
         val requestBody = RequestBody.create(MediaType.parse("image/jpg"), file)
         val body = MultipartBody.Part.createFormData("profile_photo", file.name, requestBody)
-        repository.postImage(body, token)
-        val path = file.absolutePath
-        saveHeadInDB(path, token,callback)
+        repository.postImage(body, token) {
+            saveHeadInDB(it, token, callback)
+        }
+
     }
 
     private fun saveHeadInDB(filePath: String, token: String, callback: () -> Unit) {

@@ -8,6 +8,9 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "user_info")
 data class UserBean(
+    @SerializedName("awards")
+    @Ignore
+    var responseAwards: List<String>? = null,
     @SerializedName("city")
     var city: String = "",
     @SerializedName("company")
@@ -56,18 +59,24 @@ data class UserBean(
 ) {
     @ColumnInfo(name = "direction")
     var direction: String = ""
+
     @ColumnInfo(name = "graduation")
     var graduation: String = ""
 
     var first: Boolean = false
 
+    @ColumnInfo(name = "awards")
+    var award: String = ""
+
     /**
      * state:0(陌生人)，1（自己），2（新好友），4（好友）
      */
     var state: Int = 0
+
     @ColumnInfo(name = "on_line")
     var onLine: Boolean = false
     var pinyin: String = ""
+
     @Ignore
     var isLast = false
 }

@@ -13,7 +13,6 @@ import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.DirectionDao
 import com.example.matechatting.database.AccountDao
 import com.example.matechatting.database.UserInfoDao
-import com.example.matechatting.mainprocess.login.LoginRepository
 import com.example.matechatting.network.*
 import com.example.matechatting.utils.ExecuteObserver
 import com.example.matechatting.utils.PinyinUtil
@@ -138,19 +137,19 @@ class MyInfoRepository(
         //设置UserBean的方向及入学年
         saveTemp = setInfo(saveTemp)
         //如果有头像信息，则缓存入本地，并返回缓存路径
-        if (!saveTemp.headImage.isNullOrEmpty()) {
-            saveHeadImagePath(saveTemp) {
-                if (token.isEmpty()) {
-                    saveInDB(it)
-                }
-                callback(it)
-            }
-        } else {
+//        if (!saveTemp.headImage.isNullOrEmpty()) {
+//            saveHeadImagePath(saveTemp) {
+//                if (token.isEmpty()) {
+//                    saveInDB(it)
+//                }
+//                callback(it)
+//            }
+//        } else {
             if (token.isEmpty()) {
                 saveInDB(saveTemp)
             }
             callback(saveTemp)
-        }
+//        }
     }
 
     /**
@@ -186,6 +185,14 @@ class MyInfoRepository(
                 sb.append(s)
             }
             result.direction = sb.toString().trim()
+        }
+        if (!result.responseAwards.isNullOrEmpty()) {
+            val sb = java.lang.StringBuilder()
+            for (s: String in result.responseAwards!!) {
+                sb.append(" ")
+                sb.append(s)
+            }
+            result.award = sb.toString()
         }
         val sb = StringBuilder()
         sb.append(result.graduationYear)

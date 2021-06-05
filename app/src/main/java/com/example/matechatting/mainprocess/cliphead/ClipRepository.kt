@@ -13,7 +13,7 @@ import okhttp3.MultipartBody
 
 class ClipRepository(private val userInfoDao: UserInfoDao) : BaseRepository {
 
-    fun postImage(file: MultipartBody.Part, token: String) {
+    fun postImage(file: MultipartBody.Part, token: String,callback: (String) -> Unit) {
         val service: PostImageService = if (token.isEmpty()) {
             IdeaApi.getApiService(PostImageService::class.java)
         } else {
@@ -22,7 +22,9 @@ class ClipRepository(private val userInfoDao: UserInfoDao) : BaseRepository {
         service.postImage(file)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext {}
+            .doOnNext {
+                callback(it.payload)
+            }
             .subscribe()
     }
 

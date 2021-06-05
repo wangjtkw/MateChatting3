@@ -13,6 +13,9 @@ data class HomeItemBean(
     @SerializedName("directions")
     @Ignore
     val drec: List<String>? = null,
+    @SerializedName("awards")
+    @Ignore
+    val responseAwards: List<String>? = null,
     @ColumnInfo(name = "graduation_year")
     @SerializedName("graduation_year")
     var graduationYear: Int = 0,
@@ -30,8 +33,12 @@ data class HomeItemBean(
 ) {
     @ColumnInfo(name = "direction")
     var direction: String = ""
+
     @ColumnInfo(name = "graduation")
     var graduation: String = ""
+
+    @ColumnInfo(name = "awards")
+    var award: String = ""
 //
 //    constructor():this("",null,0,0,"","","")
 }

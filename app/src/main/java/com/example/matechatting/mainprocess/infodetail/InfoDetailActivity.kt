@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
@@ -26,6 +27,7 @@ import java.util.*
 
 
 class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
+    private val TAG = "InfoDetailActivity"
     private lateinit var back: FrameLayout
     private lateinit var viewModel: InfoDetailViewModel
     private lateinit var changeButton: Button
@@ -141,6 +143,7 @@ class InfoDetailActivity : BaseActivity<ActivityInfoDetailBinding>() {
 
     private fun initChangeButton() {
         changeButton.setOnClickListener {
+            Log.d(TAG,(MainActivity.service == null).toString())
             MainActivity.service?.addFriend(id, UUID.randomUUID().toString())
         }
     }

@@ -50,16 +50,17 @@ class HomeSearchResultAdapter(
     override fun onBindViewHolder(holder: BaseHolder, position: Int) {
         when (holder) {
             is HomeSearchResultHolder -> {
-                Log.d("aaa","HomeItemPersonHolder")
+                Log.d("aaa", "HomeItemPersonHolder")
                 holder.bind(HomeSearchResultSource(getItem(position)))
                 holder.getLayout().setOnClickListener { callbackPersonLayout(getItem(position).id) }
                 holder.getButton().setOnClickListener { callbackPersonButton(getItem(position).id) }
             }
             is HomeSearchResultFootHolder -> {
-                Log.d("aaa","HomeSearchResultFootHolder")
+                Log.d("aaa", "HomeSearchResultFootHolder")
                 if (needGone) {
                     holder.getView().visibility = View.GONE
                 } else {
+                    holder.getView().visibility = View.VISIBLE
                     holder.getView().setOnClickListener { callbackLoadMore(getPage()) }
                 }
             }
@@ -76,7 +77,7 @@ class HomeSearchResultAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        Log.d("aaa","position $position  dataList.size ${dataList.size}" )
+        Log.d("aaa", "position $position  dataList.size ${dataList.size}")
         return when (position) {
             dataList.size -> FOOT
             else -> VIEW

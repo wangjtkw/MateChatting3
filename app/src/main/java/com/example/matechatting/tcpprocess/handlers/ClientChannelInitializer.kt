@@ -18,13 +18,6 @@ class ClientChannelInitializer(private val lite: MessageLite, private val contex
     @Throws(Exception::class)
     override fun initChannel(socketChannel: SocketChannel) {
         socketChannel.pipeline()
-            .addLast(LoggingHandler (LogLevel.ERROR))
-            //decoder
-            .addLast(ProtobufVarint32FrameDecoder())
-            .addLast(ProtobufDecoder(lite))
-            //encoder
-            .addLast(ProtobufVarint32LengthFieldPrepender())
-            .addLast(ProtobufEncoder())
-            .addLast(ClientHandler(context))
+
     }
 }

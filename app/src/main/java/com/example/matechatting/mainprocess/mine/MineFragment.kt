@@ -80,9 +80,7 @@ class MineFragment : PermissionFragment() {
      * 处理登陆后的点击事件以及登陆后的逻辑
      */
     override fun initLogin() {
-        viewModel.getMine{
-            setHeadImage(it)
-        }
+        viewModel.getMine()
         headImage.isEnabled = true
         changePassword.isEnabled = true
         myInformation.isEnabled = true

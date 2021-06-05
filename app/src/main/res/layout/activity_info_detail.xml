@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		xmlns:tools="http://schemas.android.com/tools"
-		tools:context=".InfoDetailActivity">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:context=".InfoDetailActivity">
 
 	<data>
 
 		<variable
 			name="viewmodel"
-			type="com.example.matechatting.mainprocess.infodetail.InfoDetailViewModel"/>
+			type="com.example.matechatting.mainprocess.infodetail.InfoDetailViewModel" />
 	</data>
 
 	<LinearLayout
@@ -38,7 +38,7 @@
 					android:layout_height="16dp"
 					android:src="@drawable/ic_back"
 					android:scaleType="centerCrop"
-					android:layout_gravity="center"/>
+					android:layout_gravity="center" />
 			</FrameLayout>
 
 			<TextView
@@ -47,7 +47,7 @@
 				android:layout_gravity="center"
 				android:text="详细信息"
 				android:textSize="16sp"
-				android:textColor="@color/text_4e4e4e"/>
+				android:textColor="@color/text_4e4e4e" />
 
 		</androidx.appcompat.widget.Toolbar>
 
@@ -82,7 +82,8 @@
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintLeft_toLeftOf="parent"
 						android:src="@drawable/ic_head"
-						android:layout_marginStart="11dp"/>
+						imageFromUrl="@{viewmodel.detailHeadImg}"
+						android:layout_marginStart="11dp" />
 
 					<TextView
 						android:id="@+id/info_detail_name"
@@ -95,7 +96,7 @@
 						android:textSize="18sp"
 						android:textColor="@color/text_4d4a4a"
 						android:layout_marginLeft="12dp"
-						app:layout_constraintVertical_bias="0.335"/>
+						app:layout_constraintVertical_bias="0.335" />
 
 					<TextView
 						android:id="@+id/info_detail_temp1"
@@ -108,7 +109,7 @@
 						android:layout_marginLeft="12dp"
 						android:text="专业： "
 						android:textColor="@color/text_5c5c5c"
-						android:textSize="12sp"/>
+						android:textSize="12sp" />
 
 					<TextView
 						android:id="@+id/info_detail_major"
@@ -122,7 +123,7 @@
 						android:textSize="12sp"
 						android:textColor="@color/text_5c5c5c"
 						android:singleLine="true"
-						android:ellipsize="marquee"/>
+						android:ellipsize="marquee" />
 
 					<TextView
 						android:id="@+id/info_detail_graduation"
@@ -135,7 +136,7 @@
 						app:layout_constraintVertical_bias="0.335"
 						android:text="@{viewmodel.detailGraduate}"
 						android:textColor="@color/text_999797"
-						android:textSize="12sp"/>
+						android:textSize="12sp" />
 				</androidx.constraintlayout.widget.ConstraintLayout>
 
 				<!--下面的linear-->
@@ -164,7 +165,7 @@
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="22dp"
-							android:layout_marginStart="22dp"/>
+							android:layout_marginStart="22dp" />
 
 						<TextView
 							android:id="@+id/tv_Infodetail_company"
@@ -175,7 +176,7 @@
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="120dp"
 							android:text="@{viewmodel.detailCompany}"
-							tools:ignore="SmallSp"/>
+							tools:ignore="SmallSp" />
 
 					</FrameLayout>
 
@@ -192,7 +193,7 @@
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="22dp"
-							android:layout_marginStart="22dp"/>
+							android:layout_marginStart="22dp" />
 
 						<TextView
 							android:id="@+id/tv_Infodetail_post"
@@ -203,7 +204,7 @@
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="120dp"
 							android:text="@{viewmodel.detailJob}"
-							tools:ignore="SmallSp"/>
+							tools:ignore="SmallSp" />
 					</FrameLayout>
 
 					<!--方向-->
@@ -219,7 +220,7 @@
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="22dp"
-							android:layout_marginStart="22dp"/>
+							android:layout_marginStart="22dp" />
 
 						<TextView
 							android:id="@+id/info_detail_direction"
@@ -230,7 +231,7 @@
 							android:layout_gravity="center_vertical"
 							android:text="@{viewmodel.detailDirection}"
 							android:layout_marginLeft="120dp"
-							tools:ignore="SmallSp"/>
+							tools:ignore="SmallSp" />
 
 					</FrameLayout>
 
@@ -246,8 +247,7 @@
 							android:text="QQ号"
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
-							android:layout_marginLeft="22dp"
-							/>
+							android:layout_marginLeft="22dp" />
 
 						<TextView
 							android:id="@+id/info_detail_QQ"
@@ -257,8 +257,7 @@
 							android:textColor="#5c5c5c"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="120dp"
-							android:text="@{viewmodel.detailQQ}"
-							/>
+							android:text="@{viewmodel.detailQQ}" />
 					</FrameLayout>
 
 					<!--微信号-->
@@ -273,8 +272,7 @@
 							android:text="微信号"
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
-							android:layout_marginLeft="22dp"
-							/>
+							android:layout_marginLeft="22dp" />
 
 
 						<TextView
@@ -285,8 +283,7 @@
 							android:textColor="#5c5c5c"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="120dp"
-							android:text="@{viewmodel.detailWeixin}"
-							/>
+							android:text="@{viewmodel.detailWeixin}" />
 					</FrameLayout>
 
 					<!--常用邮箱-->
@@ -301,8 +298,7 @@
 							android:text="常用邮箱"
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
-							android:layout_marginLeft="22dp"
-							/>
+							android:layout_marginLeft="22dp" />
 
 
 						<TextView
@@ -313,8 +309,7 @@
 							android:textColor="#5c5c5c"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="120dp"
-							android:text="@{viewmodel.detailEmile}"
-							/>
+							android:text="@{viewmodel.detailEmile}" />
 
 					</FrameLayout>
 
@@ -330,8 +325,7 @@
 							android:text="现所在城市"
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
-							android:layout_marginLeft="22dp"
-							/>
+							android:layout_marginLeft="22dp" />
 
 						<TextView
 							android:id="@+id/info_detail_city"
@@ -341,8 +335,35 @@
 							android:textColor="#5c5c5c"
 							android:layout_gravity="center_vertical"
 							android:layout_marginLeft="120dp"
-							android:text="@{viewmodel.detailCity}"
-							/>
+							android:text="@{viewmodel.detailCity}" />
+
+
+					</FrameLayout>
+
+					<!--所获奖项-->
+					<FrameLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:minHeight="48dp">
+
+						<TextView
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textSize="14sp"
+							android:text="所获奖项"
+							android:textColor="@color/text_4e4e4e"
+							android:layout_gravity="center_vertical"
+							android:layout_marginLeft="22dp" />
+
+						<TextView
+							android:id="@+id/info_detail_award"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:textSize="@dimen/InfodetailtvSize"
+							android:textColor="#5c5c5c"
+							android:layout_gravity="center_vertical"
+							android:layout_marginLeft="120dp"
+							android:text="@{viewmodel.detailAward}" />
 
 
 					</FrameLayout>
@@ -364,7 +385,7 @@
 							android:text="个人介绍"
 							android:textColor="@color/text_4e4e4e"
 							android:layout_gravity="center_vertical"
-							android:layout_marginStart="22dp"/>
+							android:layout_marginStart="22dp" />
 
 						<TextView
 							app:layout_constraintTop_toTopOf="parent"
@@ -378,8 +399,7 @@
 							android:layout_marginStart="120dp"
 							android:layout_marginEnd="40dp"
 							app:layout_constraintHorizontal_bias="0"
-							android:text="@{viewmodel.detailSlogan}"
-							/>
+							android:text="@{viewmodel.detailSlogan}" />
 
 					</androidx.constraintlayout.widget.ConstraintLayout>
 				</LinearLayout>
@@ -403,7 +423,7 @@
 						android:layout_marginTop="22dp"
 						android:layout_marginBottom="52dp"
 						android:textSize="14sp"
-						android:textColor="@color/text_ffffff"/>
+						android:textColor="@color/text_ffffff" />
 
 					<Button
 						android:id="@+id/info_detail_accept_button"
@@ -419,7 +439,7 @@
 						android:layout_marginBottom="52dp"
 						android:textSize="14sp"
 						android:textColor="@color/text_ffffff"
-						android:visibility="gone"/>
+						android:visibility="gone" />
 
 					<Button
 						android:id="@+id/info_chatting_button"
@@ -435,7 +455,7 @@
 						android:layout_marginBottom="52dp"
 						android:textSize="14sp"
 						android:textColor="@color/text_ffffff"
-						android:visibility="gone"/>
+						android:visibility="gone" />
 				</FrameLayout>
 
 
@@ -445,7 +465,7 @@
 					android:background="@color/bg_f6f6f6"
 					android:orientation="vertical"
 					app:layout_constraintTop_toBottomOf="@id/info_detail_info_temp2"
-					app:layout_constraintBottom_toBottomOf="parent"/>
+					app:layout_constraintBottom_toBottomOf="parent" />
 
 			</androidx.constraintlayout.widget.ConstraintLayout>
 

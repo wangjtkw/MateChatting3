@@ -2,7 +2,6 @@ package com.example.matechatting.tcpprocess.repository
 
 import android.content.Context
 import android.util.Log
-import androidx.annotation.MainThread
 import com.bumptech.glide.Glide
 import com.example.matechatting.BASE_URL
 import com.example.matechatting.MORE_BASE
@@ -12,21 +11,14 @@ import com.example.matechatting.bean.ChattingBean
 import com.example.matechatting.bean.HasMessageBean
 import com.example.matechatting.bean.UserBean
 import com.example.matechatting.database.AppDatabase
-import com.example.matechatting.mainprocess.chatting.ChattingActivity.Companion.id
-import com.example.matechatting.mainprocess.repository.UserBeanRepository
 import com.example.matechatting.network.GetAllFriendService
 import com.example.matechatting.network.GetOnlineStateService
 import com.example.matechatting.network.GetUserByIdService
 import com.example.matechatting.network.IdeaApi
 import com.example.matechatting.utils.ExecuteObserver
 import com.example.matechatting.utils.PinyinUtil
-import com.example.matechatting.utils.runOnNewThread
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
-import io.reactivex.ObservableOnSubscribe
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.util.*
 
 object TCPRepository {
 
@@ -190,6 +182,14 @@ object TCPRepository {
                     sb.append(s)
                 }
                 direction = sb.toString()
+            }
+            if (!responseAwards.isNullOrEmpty()) {
+                val sb = java.lang.StringBuilder()
+                for (s: String in responseAwards!!) {
+                    sb.append(" ")
+                    sb.append(s)
+                }
+                award = sb.toString()
             }
             val sb = StringBuilder()
             sb.append(graduationYear)
